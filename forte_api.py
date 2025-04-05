@@ -506,6 +506,66 @@ class ForteOODDetector:
             normalized_scores = np.ones_like(scores) * 0.5
         return normalized_scores
 
+
+    def find_nearest_id_point(self, ood_image_paths, id_image_paths=None):
+        """
+        For one or more points identified as OOD, find the nearest in-distribution point(s).
+        
+        Args:
+            ood_image_paths (str or list): Path(s) to OOD image(s).
+            id_image_paths (list, optional): Paths to in-distribution images used during fit.
+                If provided, the function will return these paths instead of indices.
+        
+        Returns:
+            list: Indices or paths of the nearest in-distribution points.
+            list: Distances to the nearest in-distribution points.
+        """
+        if not self.is_fitted:
+            raise RuntimeError("Detector must be fitted before finding nearest ID point")
+        
+        # Handle single image path
+        if isinstance(ood_image_paths, str):
+            ood_image_paths = [ood_image_paths]
+        
+        # Extract features for OOD images
+        ood_features = self._extract_features(ood_image_paths, name="ood_query")
+        
+        # Compute distances for each model and accumulate
+        all_distances = None
+        for model_name in ood_features:
+            if model_name not in self.id_train_features:
+                continue
+                
+            ood_model_features = ood_features[model_name]
+            id_model_features = self.id_train_features[model_name]
+            
+            # Compute distances between OOD features and ID features
+            model_distances = self._compute_pairwise_distance(ood_model_features, id_model_features)
+            
+            # Accumulate distances across models
+            if all_distances is None:
+                all_distances = model_distances
+            else:
+                all_distances += model_distances
+        
+        # Find indices and values of minimum distances
+        min_indices = []
+        min_distances = []
+        
+        for i in range(all_distances.size(0)):
+            min_idx = all_distances[i].argmin().item()
+            min_dist = all_distances[i, min_idx].item()
+            min_indices.append(min_idx)
+            min_distances.append(min_dist)
+        
+        # Convert indices to paths if requested
+        if id_image_paths is not None:
+            min_paths = [id_image_paths[idx] for idx in min_indices]
+            return min_paths, min_distances
+        
+        return min_indices, min_distances
+
+
     def evaluate(self, id_image_paths, ood_image_paths):
         """
         Evaluate the detector.

@@ -298,6 +298,41 @@ def main(args):
         plt.savefig("forte_examples.png")
         logger.info("Example predictions saved to forte_examples.png")
         
+        # Add after the "Example predictions saved to forte_examples.png" part in the visualization section:
+        if not id_correct * ood_correct == 1:  # If we have some misclassifications
+            # Find examples where OOD was misclassified as ID
+            ood_misclassified = [i for i, score in enumerate(ood_scores) if score > threshold]
+            
+            if ood_misclassified:
+                logger.info("\nDemonstrating nearest ID point functionality...")
+                num_examples = min(10, len(ood_misclassified))
+                
+                # Get misclassified OOD paths
+                ood_paths = [cifar100_test_paths[i] for i in ood_misclassified[:num_examples]]
+                
+                # Find nearest ID points
+                nearest_paths, distances = detector.find_nearest_id_point(ood_paths, cifar10_train_paths)
+                
+                # Visualize OOD images and their nearest ID counterparts
+                fig, axes = plt.subplots(2, num_examples, figsize=(15, 6))
+                
+                for i in range(num_examples):
+                    # Display OOD image
+                    ood_img = Image.open(ood_paths[i])
+                    axes[0, i].imshow(ood_img)
+                    axes[0, i].set_title(f"OOD Image\nScore: {ood_scores[ood_misclassified[i]]:.2f}")
+                    axes[0, i].axis('off')
+                    
+                    # Display nearest ID image
+                    id_img = Image.open(nearest_paths[i])
+                    axes[1, i].imshow(id_img)
+                    axes[1, i].set_title(f"Nearest ID\nDistance: {distances[i]:.2f}")
+                    axes[1, i].axis('off')
+                
+                plt.tight_layout()
+                plt.savefig("forte_nearest_id.png")
+                logger.info("Nearest ID visualizations saved to forte_nearest_id.png")
+        
         # ROC curve
         plt.figure(figsize=(8, 6))
         

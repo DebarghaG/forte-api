@@ -505,30 +505,30 @@ class ForteOODDetector:
         else:
             normalized_scores = np.ones_like(scores) * 0.5
         return normalized_scores
-
-
-    def find_nearest_id_point(self, ood_image_paths, id_image_paths=None):
+        
+    def find_nearest_id_point(self, ood_image_paths, id_image_paths=None, k=5):
         """
-        For one or more points identified as OOD, find the nearest in-distribution point(s).
+        For one or more points identified as OOD, find the k-nearest in-distribution points.
         
         Args:
             ood_image_paths (str or list): Path(s) to OOD image(s).
-            id_image_paths (list, optional): Paths to in-distribution images used during fit.
-                If provided, the function will return these paths instead of indices.
+            id_image_paths (list, optional): Paths to in-distribution images to search in.
+                If None, will use training images.
+            k (int): Number of nearest neighbors to find (default=5).
         
         Returns:
-            list: Indices or paths of the nearest in-distribution points.
-            list: Distances to the nearest in-distribution points.
+            list of lists: For each OOD point, paths/indices of the k-nearest in-distribution points.
+            list of lists: For each OOD point, distances to the k-nearest in-distribution points.
         """
         if not self.is_fitted:
-            raise RuntimeError("Detector must be fitted before finding nearest ID point")
+            raise RuntimeError("Detector must be fitted before finding nearest ID points")
         
         # Handle single image path
         if isinstance(ood_image_paths, str):
             ood_image_paths = [ood_image_paths]
         
         # Extract features for OOD images
-        ood_features = self._extract_features(ood_image_paths, name="ood_query")
+        ood_features = self._extract_features(ood_image_paths, name="ood_nearest_query")
         
         # Compute distances for each model and accumulate
         all_distances = None
@@ -548,23 +548,24 @@ class ForteOODDetector:
             else:
                 all_distances += model_distances
         
-        # Find indices and values of minimum distances
-        min_indices = []
-        min_distances = []
+        # Find k smallest indices and distances for each OOD point
+        k_indices_lists = []
+        k_distances_lists = []
         
         for i in range(all_distances.size(0)):
-            min_idx = all_distances[i].argmin().item()
-            min_dist = all_distances[i, min_idx].item()
-            min_indices.append(min_idx)
-            min_distances.append(min_dist)
+            values, indices = torch.topk(all_distances[i], k=min(k, all_distances.size(1)), largest=False)
+            k_indices_lists.append(indices.cpu().numpy())
+            k_distances_lists.append(values.cpu().numpy())
         
         # Convert indices to paths if requested
         if id_image_paths is not None:
-            min_paths = [id_image_paths[idx] for idx in min_indices]
-            return min_paths, min_distances
+            k_paths_lists = []
+            for indices in k_indices_lists:
+                paths = [id_image_paths[idx] for idx in indices]
+                k_paths_lists.append(paths)
+            return k_paths_lists, k_distances_lists
         
-        return min_indices, min_distances
-
+        return k_indices_lists, k_distances_lists
 
     def evaluate(self, id_image_paths, ood_image_paths):
         """

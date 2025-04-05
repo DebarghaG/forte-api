@@ -297,41 +297,44 @@ def main(args):
         plt.tight_layout()
         plt.savefig("forte_examples.png")
         logger.info("Example predictions saved to forte_examples.png")
-        
+
         # Add after the "Example predictions saved to forte_examples.png" part in the visualization section:
         if not id_correct * ood_correct == 1:  # If we have some misclassifications
             # Find examples where OOD was misclassified as ID
             ood_misclassified = [i for i, score in enumerate(ood_scores) if score > threshold]
             
             if ood_misclassified:
-                logger.info("\nDemonstrating nearest ID point functionality...")
-                num_examples = min(10, len(ood_misclassified))
+                k = 5  # Number of nearest neighbors to display
+                logger.info(f"\nDemonstrating {k}-nearest ID points functionality...")
+                num_examples = min(3, len(ood_misclassified))
                 
                 # Get misclassified OOD paths
                 ood_paths = [cifar100_test_paths[i] for i in ood_misclassified[:num_examples]]
                 
-                # Find nearest ID points
-                nearest_paths, distances = detector.find_nearest_id_point(ood_paths, cifar10_train_paths)
+                # Find k-nearest ID points
+                nearest_paths_lists, distances_lists = detector.find_nearest_id_point(ood_paths, cifar10_train_paths, k=k)
                 
-                # Visualize OOD images and their nearest ID counterparts
-                fig, axes = plt.subplots(2, num_examples, figsize=(15, 6))
-                
-                for i in range(num_examples):
-                    # Display OOD image
-                    ood_img = Image.open(ood_paths[i])
-                    axes[0, i].imshow(ood_img)
-                    axes[0, i].set_title(f"OOD Image\nScore: {ood_scores[ood_misclassified[i]]:.2f}")
-                    axes[0, i].axis('off')
+                for idx in range(num_examples):
+                    # Create a figure with the OOD image and its k nearest neighbors
+                    fig, axes = plt.subplots(1, k+1, figsize=(3*(k+1), 3))
                     
-                    # Display nearest ID image
-                    id_img = Image.open(nearest_paths[i])
-                    axes[1, i].imshow(id_img)
-                    axes[1, i].set_title(f"Nearest ID\nDistance: {distances[i]:.2f}")
-                    axes[1, i].axis('off')
+                    # Display OOD image
+                    ood_img = Image.open(ood_paths[idx])
+                    axes[0].imshow(ood_img)
+                    axes[0].set_title(f"OOD Image\nScore: {ood_scores[ood_misclassified[idx]]:.2f}")
+                    axes[0].axis('off')
+                    
+                    # Display k nearest ID images
+                    for i in range(k):
+                        id_img = Image.open(nearest_paths_lists[idx][i])
+                        axes[i+1].imshow(id_img)
+                        axes[i+1].set_title(f"ID #{i+1}\nDist: {distances_lists[idx][i]:.2f}")
+                        axes[i+1].axis('off')
+                    
+                    plt.tight_layout()
+                    plt.savefig(f"forte_nearest_id_{idx+1}.png")
                 
-                plt.tight_layout()
-                plt.savefig("forte_nearest_id.png")
-                logger.info("Nearest ID visualizations saved to forte_nearest_id.png")
+                logger.info(f"Nearest ID visualizations saved to forte_nearest_id_[1-{num_examples}].png")
         
         # ROC curve
         plt.figure(figsize=(8, 6))

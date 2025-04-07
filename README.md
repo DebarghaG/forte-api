@@ -8,7 +8,12 @@ The Forte library provides robust out-of-distribution (OOD) detection capabiliti
 2. Incorporates manifold estimation to account for local topology
 3. Requires no class labels or exposure to OOD data during training
 
-This makes Forte particularly useful for real-world applications where anomalous data may be unexpected or unknown at training time.
+This makes Forte particularly useful for real-world applications where anomalous data may be unexpected or unknown at training time. Our goal is to provide a non-opinionated middleware for OOD detection that seamlessly integrates into your ML deployment pipelines.
+
+**Why use Forte?**
+Forte OOD Detection serves as middleware between your data ingestion and ML inference systems, by preventing models from making predictions on data they weren't designed to handle. 
+
+ICICLE Tag : Foundation-AI
 
 
 ## Key Features
@@ -188,3 +193,5 @@ Forte uses three pretrained models for feature extraction:
 
 You may modify the code to use your own encoder if you wish. This may be a CNN or a ViT. Anything you want.
 
+### Acknowledgements
+National Science Foundation (NSF) funded AI institute for Intelligent Cyberinfrastructure with Computational Learning in the Environment (ICICLE) (OAC 2112606)

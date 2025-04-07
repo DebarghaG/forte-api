@@ -16,7 +16,9 @@ Forte OOD Detection serves as middleware between your data ingestion and ML infe
 ICICLE Tag : Foundation-AI
 
 
-## Key Features
+## How-To Guide
+
+**Key Features inside Forte**
 
 - **Multiple feature extractors**: Leverages CLIP, ViT-MSN, and DINOv2 models for robust semantic representation
 - **Topology-aware scoring**: Uses Precision, Recall, Density, and Coverage (PRDC) metrics to capture manifold structure
@@ -123,7 +125,7 @@ metrics = detector.evaluate(id_image_paths, ood_image_paths)
 print(f"AUROC: {metrics['AUROC']:.4f}")
 ```
 
-## Usage Examples
+## Tutorial 
 
 ### Basic Usage
 

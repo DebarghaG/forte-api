@@ -3,6 +3,8 @@ import time
 import math
 import numpy as np
 import torch
+import torch.nn as nn
+import torch.optim as optim
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 from transformers import CLIPModel, CLIPProcessor, ViTMSNModel, AutoFeatureExtractor, AutoModel, AutoImageProcessor
@@ -35,7 +37,8 @@ class ForteOODDetector:
                  device=None,
                  embedding_dir="./embeddings",
                  nearest_k=5,
-                 method='gmm'):
+                 method='gmm',
+                 svdd_epochs=100):
         """
         Initialize the ForteOODDetector.
 
@@ -68,6 +71,11 @@ class ForteOODDetector:
         self.id_train_features = None   # GPU tensors for feature extraction
         self.id_train_prdc = None       # Combined PRDC features (GPU tensor)
         self.detector = None
+        # Deep SVDD components
+        self.svdd_net = None
+        self.svdd_center = None
+        self.svdd_radius = None
+        self.svdd_epochs = svdd_epochs  # number of SVDD training epochs
 
         os.makedirs(self.embedding_dir, exist_ok=True)
 
@@ -391,6 +399,56 @@ class ForteOODDetector:
                 self.detector = OneClassSVM(
                     kernel='rbf', gamma='scale', nu=best_nu)
                 self.detector.fit(id_train_prdc_cpu)
+        elif self.method == 'deepsvdd': # Idea comes from the paper: Deep One-Class Classification
+            # Train Deep SVDD on PRDC features
+            print("Training Deep SVDD on PRDC features...")
+            # Move PRDC features to device
+            X = self.id_train_prdc.to(self.device)
+            n_features = X.shape[1]
+            # The paper warns that bias parameters allow a trivial constant mapping 
+            # (“hypersphere collapse”) unless removed.
+            # We propose using BatchNorm and Dropout to alter the embedding distribution 
+            # (thus radius) as we saw empirical benefits in forte_demo.
+            self.svdd_net = nn.Sequential(
+                nn.Linear(n_features, 256, bias=False),
+                nn.ReLU(),
+                nn.BatchNorm1d(256),
+                nn.Dropout(0.2),
+                nn.Linear(256, 128, bias=False),
+                nn.ReLU(),
+                nn.BatchNorm1d(128),
+                nn.Dropout(0.2),
+                nn.Linear(128, 64),
+                nn.ReLU(),
+                nn.BatchNorm1d(64)
+            ).to(self.device)
+            # This aligns the paper's recommendation: "We found empirically that fixing c as the mean of the network 
+            # representations that result from performing an initial forward pass on some training data sample to be 
+            # a good strategy. Although we obtained similar results in our experiments for other choices of c 
+            # (making sure c != c0), we found that fixing c in the neighborhood of the initial network outputs made SGD 
+            # convergence faster and more robust."
+            # - Compute c from a pretrained network or after a short warm‑up of contrastive/reconstruction training
+            #   to ground the center in semantically meaningful features.
+            # - Use a momentum‐based or soft‐update rule for c (moving average of fθ(X)) so it adapts slowly
+            #   without collapsing to trivial solutions.
+            with torch.no_grad():
+                Z = self.svdd_net(X)
+                self.svdd_center = Z.mean(dim=0, keepdim=True)
+            # Train to minimize ||f(x)-c||^2 (eq4 of the paper)
+            optimizer = optim.Adam(self.svdd_net.parameters(), lr=1e-4, weight_decay=1e-6) # eq4 of the paper has a weight decay term, might need to tune it
+            for epoch in range(self.svdd_epochs):
+                optimizer.zero_grad()
+                Z = self.svdd_net(X)
+                loss = torch.mean(
+                    torch.sum((Z - self.svdd_center) ** 2, dim=1))
+                loss.backward()
+                optimizer.step()
+            # Set radius R as max distance in train set
+            with torch.no_grad():
+                Z = self.svdd_net(X)
+                dists = torch.sqrt(
+                    torch.sum((Z - self.svdd_center) ** 2, dim=1))
+                self.svdd_radius = dists.max().item()
 
         self.is_fitted = True
         fit_time = time.time() - start_time
@@ -428,6 +486,14 @@ class ForteOODDetector:
 
         X_test_prdc = torch.cat(X_test_prdc, dim=1)
         print(f"Combined test PRDC shape: {X_test_prdc.shape}")
+        # Deep SVDD scoring: negative distance to center
+        if self.method == 'deepsvdd':
+            X_tensor = X_test_prdc.to(self.device)
+            with torch.no_grad():
+                Z_test = self.svdd_net(X_tensor)
+                dists = torch.sqrt(
+                    torch.sum((Z_test - self.svdd_center.to(self.device)) ** 2, dim=1))
+            return (-dists).cpu().numpy()
 
         # For custom (GPU-based) detectors, use torch outputs; then convert to numpy if needed.
         if self.custom_detector:
@@ -505,58 +571,62 @@ class ForteOODDetector:
         else:
             normalized_scores = np.ones_like(scores) * 0.5
         return normalized_scores
-        
+
     def find_nearest_id_point(self, ood_image_paths, id_image_paths=None, k=5):
         """
         For one or more points identified as OOD, find the k-nearest in-distribution points.
-        
+
         Args:
             ood_image_paths (str or list): Path(s) to OOD image(s).
             id_image_paths (list, optional): Paths to in-distribution images to search in.
                 If None, will use training images.
             k (int): Number of nearest neighbors to find (default=5).
-        
+
         Returns:
             list of lists: For each OOD point, paths/indices of the k-nearest in-distribution points.
             list of lists: For each OOD point, distances to the k-nearest in-distribution points.
         """
         if not self.is_fitted:
-            raise RuntimeError("Detector must be fitted before finding nearest ID points")
-        
+            raise RuntimeError(
+                "Detector must be fitted before finding nearest ID points")
+
         # Handle single image path
         if isinstance(ood_image_paths, str):
             ood_image_paths = [ood_image_paths]
-        
+
         # Extract features for OOD images
-        ood_features = self._extract_features(ood_image_paths, name="ood_nearest_query")
-        
+        ood_features = self._extract_features(
+            ood_image_paths, name="ood_nearest_query")
+
         # Compute distances for each model and accumulate
         all_distances = None
         for model_name in ood_features:
             if model_name not in self.id_train_features:
                 continue
-                
+
             ood_model_features = ood_features[model_name]
             id_model_features = self.id_train_features[model_name]
-            
+
             # Compute distances between OOD features and ID features
-            model_distances = self._compute_pairwise_distance(ood_model_features, id_model_features)
-            
+            model_distances = self._compute_pairwise_distance(
+                ood_model_features, id_model_features)
+
             # Accumulate distances across models
             if all_distances is None:
                 all_distances = model_distances
             else:
                 all_distances += model_distances
-        
+
         # Find k smallest indices and distances for each OOD point
         k_indices_lists = []
         k_distances_lists = []
-        
+
         for i in range(all_distances.size(0)):
-            values, indices = torch.topk(all_distances[i], k=min(k, all_distances.size(1)), largest=False)
+            values, indices = torch.topk(all_distances[i], k=min(
+                k, all_distances.size(1)), largest=False)
             k_indices_lists.append(indices.cpu().numpy())
             k_distances_lists.append(values.cpu().numpy())
-        
+
         # Convert indices to paths if requested
         if id_image_paths is not None:
             k_paths_lists = []
@@ -564,7 +634,7 @@ class ForteOODDetector:
                 paths = [id_image_paths[idx] for idx in indices]
                 k_paths_lists.append(paths)
             return k_paths_lists, k_distances_lists
-        
+
         return k_indices_lists, k_distances_lists
 
     def evaluate(self, id_image_paths, ood_image_paths):

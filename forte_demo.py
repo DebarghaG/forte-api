@@ -174,7 +174,8 @@ def main(args):
         device=args.device,
         embedding_dir=args.embedding_dir,
         method=args.method,
-        nearest_k=args.nearest_k
+        nearest_k=args.nearest_k,
+        svdd_epochs=args.svdd_epochs
     )
     
     # Fit the detector - this performs feature extraction, PRDC computation, and detector training
@@ -373,11 +374,11 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size for processing")
     parser.add_argument("--device", type=str, default="cuda:0" if torch.cuda.is_available() else "cpu", 
                         help="Device to use")
-    parser.add_argument("--method", type=str, default="gmm", choices=["gmm", "kde", "ocsvm"], 
+    parser.add_argument("--method", type=str, default="gmm", choices=["gmm", "kde", "ocsvm", "deepsvdd"],
                         help="OOD detection method")
     parser.add_argument("--nearest_k", type=int, default=5, help="Number of nearest neighbors for PRDC")
-    parser.add_argument("--num_train_images", type=int, default=1000, help="Number of training images")
-    parser.add_argument("--num_test_images", type=int, default=500, help="Number of test images")
+    parser.add_argument("--num_train_images", type=int, default=5000, help="Number of training images")
+    parser.add_argument("--num_test_images", type=int, default=2500, help="Number of test images")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--visualize", action="store_true", help="Visualize results")
     parser.add_argument("--force_save", action="store_true", help="Force save images even if they exist")
@@ -385,6 +386,8 @@ if __name__ == "__main__":
     parser.add_argument("--log_level", type=str, default="INFO", 
                         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
                         help="Logging level")
+    parser.add_argument("--svdd_epochs", type=int, default=100,
+                        help="Epochs to train Deep SVDD")
     
     args = parser.parse_args()
     

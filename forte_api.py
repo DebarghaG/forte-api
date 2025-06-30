@@ -522,9 +522,14 @@ class ForteOODDetector:
 
         print(
             f"Evaluating on {len(id_image_paths)} ID and {len(ood_image_paths)} OOD images...")
-        id_scores = self._get_ood_scores(id_image_paths, cache_name="id_eval")
-        ood_scores = self._get_ood_scores(
-            ood_image_paths, cache_name="ood_eval")
+        
+        # Fuse ID and OOD samples for processing together
+        all_image_paths = id_image_paths + ood_image_paths
+        all_scores = self._get_ood_scores(all_image_paths, cache_name="eval_fused")
+        
+        # Split the scores back to ID and OOD
+        id_scores = all_scores[:len(id_image_paths)]
+        ood_scores = all_scores[len(id_image_paths):]
 
         print("\nScore Statistics:")
         print(

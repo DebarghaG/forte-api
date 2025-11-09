@@ -8,6 +8,7 @@ This module provides GPU-accelerated implementations of:
 """
 
 import math
+from typing import Callable, Optional, Union
 
 import numpy as np
 import torch
@@ -72,15 +73,27 @@ class TorchGMM:
         # X: (n_samples, n_features)
         n_samples, n_features = X.shape
         # Create a batched MultivariateNormal distribution for each component
-        mvn = torch.distributions.MultivariateNormal(
-            self.means_,
-            covariance_matrix=self.covariances_
-            + self.reg_covar * torch.eye(n_features, device=self.device),
-        )
-        # X has shape (n_samples, n_features); unsqueeze to (n_samples, 1, n_features)
-        # to broadcast over components
-        # Expected shape: (n_samples, n_components)
-        log_prob = mvn.log_prob(X.unsqueeze(1))
+        covariances = self.covariances_ + self.reg_covar * torch.eye(n_features, device=self.device)
+
+        # MPS doesn't support MultivariateNormal with cholesky, so we fall back to CPU
+        if self.device == "mps":
+            means_cpu = self.means_.cpu()
+            covariances_cpu = covariances.cpu()
+            X_cpu = X.cpu()
+            mvn = torch.distributions.MultivariateNormal(
+                means_cpu,
+                covariance_matrix=covariances_cpu,
+            )
+            log_prob = mvn.log_prob(X_cpu.unsqueeze(1)).to(self.device)
+        else:
+            mvn = torch.distributions.MultivariateNormal(
+                self.means_,
+                covariance_matrix=covariances,
+            )
+            # X has shape (n_samples, n_features); unsqueeze to (n_samples, 1, n_features)
+            # to broadcast over components
+            # Expected shape: (n_samples, n_components)
+            log_prob = mvn.log_prob(X.unsqueeze(1))
         return log_prob
 
     def _e_step(self, X):
@@ -113,14 +126,14 @@ class TorchGMM:
             covariances.append(cov_k)
         self.covariances_ = torch.stack(covariances, dim=0)
 
-    def fit(self, X):
+    def fit(self, X: torch.Tensor) -> "TorchGMM":
         """Fit the GMM model on data X.
 
         Args:
             X (torch.Tensor): Input data of shape (n_samples, n_features) on self.device.
 
         Returns:
-            self
+            TorchGMM: The fitted model instance.
         """
         X = X.to(self.device)
         self._initialize_parameters(X)
@@ -137,7 +150,7 @@ class TorchGMM:
         self.lower_bound_ = lower_bound
         return self
 
-    def score_samples(self, X):
+    def score_samples(self, X: torch.Tensor) -> torch.Tensor:
         """Compute the log-likelihood of each sample under the model.
 
         Args:
@@ -152,7 +165,7 @@ class TorchGMM:
         log_prob_norm = torch.logsumexp(weighted_log_prob, dim=1)
         return log_prob_norm
 
-    def bic(self, X):
+    def bic(self, X: torch.Tensor) -> float:
         """Bayesian Information Criterion for the current model.
 
         Args:
@@ -168,13 +181,19 @@ class TorchGMM:
             + self.n_components * n_features * (n_features + 1) / 2
         )
         log_likelihood = self.score_samples(X).sum().item()
-        return -2 * log_likelihood + p * np.log(n_samples)
+        return float(-2 * log_likelihood + p * np.log(n_samples))
 
 
 class TorchKDE:
     """PyTorch implementation of Kernel Density Estimation with GPU acceleration."""
 
-    def __init__(self, dataset, bw_method=None, weights=None, device="cuda"):
+    def __init__(
+        self,
+        dataset: torch.Tensor,
+        bw_method: Optional[Union[str, float, Callable]] = None,
+        weights: Optional[torch.Tensor] = None,
+        device: str = "cuda",
+    ):
         """Initialize Kernel Density Estimator.
 
         Args:
@@ -190,7 +209,7 @@ class TorchKDE:
         # Process weights (assumed to be a torch.Tensor on device if provided).
         if weights is not None:
             self.weights = (weights / weights.sum()).to(dtype=torch.float32)
-            self.neff = (self.weights.sum() ** 2) / (self.weights**2).sum()
+            self.neff = ((self.weights.sum() ** 2) / (self.weights**2).sum()).item()
             # Weighted covariance: cov = sum_i w_i (x_i - mean)(x_i - mean)^T / (1 - sum(w_i^2))
             weighted_mean = (self.dataset * self.weights.unsqueeze(0)).sum(dim=1, keepdim=True)
             diff = self.dataset - weighted_mean
@@ -199,7 +218,7 @@ class TorchKDE:
             self.weights = torch.full(
                 (self.n,), 1.0 / self.n, dtype=torch.float32, device=self.device
             )
-            self.neff = self.n
+            self.neff = float(self.n)
             weighted_mean = self.dataset.mean(dim=1, keepdim=True)
             diff = self.dataset - weighted_mean
             cov = diff @ diff.T / (self.n - 1)
@@ -235,12 +254,20 @@ class TorchKDE:
         self.covariance = self._data_covariance * (self.factor**2)
         # Increase regularization to ensure positive definiteness.
         reg = 1e-6
-        self.cho_cov = torch.linalg.cholesky(
-            self.covariance + reg * torch.eye(self.d, device=self.device, dtype=self.dataset.dtype)
+        cov_matrix = self.covariance + reg * torch.eye(
+            self.d, device=self.device, dtype=self.dataset.dtype
         )
+
+        # MPS doesn't support linalg.cholesky, so we fall back to CPU for this operation
+        if self.device == "mps":
+            cov_cpu = cov_matrix.cpu()
+            self.cho_cov = torch.linalg.cholesky(cov_cpu).to(self.device)
+        else:
+            self.cho_cov = torch.linalg.cholesky(cov_matrix)
+
         self.log_det = 2.0 * torch.log(torch.diag(self.cho_cov)).sum()
 
-    def evaluate(self, points):
+    def evaluate(self, points: torch.Tensor) -> torch.Tensor:
         """Evaluate the KDE at given points.
 
         Args:
@@ -263,15 +290,30 @@ class TorchKDE:
         diff = self.dataset.unsqueeze(2) - points.unsqueeze(1)
         # Flatten differences for cholesky_solve: (d, n*m)
         diff_flat = diff.reshape(self.d, -1)
-        sol_flat = torch.cholesky_solve(diff_flat, self.cho_cov)
+
+        # MPS doesn't support cholesky_solve, so we fall back to CPU for this operation
+        if self.device == "mps":
+            diff_cpu = diff_flat.cpu()
+            cho_cov_cpu = self.cho_cov.cpu()
+            sol_flat = torch.cholesky_solve(diff_cpu, cho_cov_cpu).to(self.device)
+        else:
+            sol_flat = torch.cholesky_solve(diff_flat, self.cho_cov)
+
         sol = sol_flat.view(diff.shape)
         energy = 0.5 * (diff * sol).sum(dim=0)  # shape: (n, m)
         result = torch.exp(-energy).T @ self.weights  # shape: (m,)
         norm_const = torch.exp(-self.log_det) / ((2 * math.pi) ** (self.d / 2))
-        return result * norm_const
+        return torch.as_tensor(result * norm_const)
 
-    def logpdf(self, points):
-        """Compute log probability density at given points."""
+    def logpdf(self, points: torch.Tensor) -> torch.Tensor:
+        """Compute log probability density at given points.
+
+        Args:
+            points (torch.Tensor): Points to evaluate.
+
+        Returns:
+            torch.Tensor: Log probability densities.
+        """
         return torch.log(self.evaluate(points) + 1e-10)
 
     __call__ = evaluate
@@ -296,14 +338,14 @@ class TorchOCSVM:
         self.w = None
         self.rho = None
 
-    def fit(self, X):
+    def fit(self, X: torch.Tensor) -> "TorchOCSVM":
         """Fit the One-Class SVM model.
 
         Args:
             X (torch.Tensor): Training data of shape (n_samples, n_features).
 
         Returns:
-            self
+            TorchOCSVM: The fitted model instance.
         """
         # Ensure X is on the correct device.
         X = X.to(self.device)
@@ -327,7 +369,7 @@ class TorchOCSVM:
                 print(f"OCSVM iter {i+1}/{self.n_iters}, loss: {loss.item():.4f}")
         return self
 
-    def decision_function(self, X):
+    def decision_function(self, X: torch.Tensor) -> torch.Tensor:
         """Compute the decision function for samples.
 
         Args:
@@ -337,9 +379,9 @@ class TorchOCSVM:
             torch.Tensor: Decision values.
         """
         X = X.to(self.device)
-        return X @ self.w - self.rho
+        return torch.as_tensor(X @ self.w - self.rho)
 
-    def predict(self, X):
+    def predict(self, X: torch.Tensor) -> torch.Tensor:
         """Predict class labels.
 
         Args:

@@ -40,11 +40,11 @@ Custom PyTorch implementations for GPU-accelerated anomaly detection.
       show_source: true
       members:
         - __init__
-        - fit
         - evaluate
         - logpdf
         - scotts_factor
         - silverman_factor
+        - set_bandwidth
 
 ### TorchOCSVM
 

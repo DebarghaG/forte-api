@@ -6,6 +6,7 @@ This module implements the main ForteOODDetector class based on the ICLR 2025 pa
 
 import os
 import time
+from typing import Dict, List
 
 import numpy as np
 import torch
@@ -287,7 +288,9 @@ class ForteOODDetector:
 
         return torch.stack((recall, density, precision, coverage), dim=1)
 
-    def fit(self, id_image_paths, val_split=0.2, random_state=42):
+    def fit(
+        self, id_image_paths: List[str], val_split: float = 0.2, random_state: int = 42
+    ) -> "ForteOODDetector":
         """
         Fit the OOD detector on in-distribution images.
 
@@ -297,7 +300,7 @@ class ForteOODDetector:
             random_state (int): Random seed.
 
         Returns:
-            self: The fitted detector.
+            ForteOODDetector: The fitted detector.
         """
         start_time = time.time()
         print(f"Fitting ForteOODDetector on {len(id_image_paths)} images...")
@@ -355,15 +358,17 @@ class ForteOODDetector:
                     gmm.fit(self.id_train_prdc)
                     bic_val = gmm.bic(self.id_train_prdc)
                 else:
-                    id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
-                    gmm = GaussianMixture(
+                    id_train_prdc_cpu = self.id_train_prdc.cpu()
+                    id_train_prdc_np = id_train_prdc_cpu.numpy()
+                    gmm_sklearn: GaussianMixture = GaussianMixture(
                         n_components=n_components,
                         covariance_type="full",
                         random_state=random_state,
                         max_iter=100,
                     )
-                    gmm.fit(id_train_prdc_cpu)
-                    bic_val = gmm.bic(id_train_prdc_cpu)
+                    gmm_sklearn.fit(id_train_prdc_np)
+                    bic_val = float(gmm_sklearn.bic(id_train_prdc_np))
+                    gmm = gmm_sklearn
                 if bic_val < best_bic:
                     best_bic = bic_val
                     best_n_components = n_components
@@ -380,7 +385,7 @@ class ForteOODDetector:
 
         elif self.method == "ocsvm":
             if self.custom_detector:
-                best_accuracy = 0
+                best_accuracy = 0.0
                 best_nu = 0.01
                 best_model = None
                 for nu in [0.01, 0.05, 0.1, 0.2, 0.5]:
@@ -397,15 +402,15 @@ class ForteOODDetector:
                 print(f"Selected nu={best_nu} for TorchOCSVM with accuracy {best_accuracy:.4f}")
                 self.detector = best_model
             else:
-                best_accuracy = 0
+                best_accuracy = 0.0
                 best_nu = 0.01
                 for nu in [0.01, 0.05, 0.1, 0.2, 0.5]:
                     try:
-                        id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
+                        id_train_prdc_np = self.id_train_prdc.cpu().numpy()
                         ocsvm = OneClassSVM(kernel="rbf", gamma="scale", nu=nu)
-                        ocsvm.fit(id_train_prdc_cpu)
-                        val_pred = ocsvm.predict(id_train_prdc_cpu)
-                        accuracy = np.mean(val_pred == 1)
+                        ocsvm.fit(id_train_prdc_np)
+                        val_pred = ocsvm.predict(id_train_prdc_np)
+                        accuracy = float(np.mean(val_pred == 1))
                         if accuracy > best_accuracy:
                             best_accuracy = accuracy
                             best_nu = nu
@@ -413,9 +418,9 @@ class ForteOODDetector:
                         print(f"Error with nu={nu}: {e}")
                         continue
                 print(f"Selected nu={best_nu} for OCSVM with accuracy {best_accuracy:.4f}")
-                id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
+                id_train_prdc_np = self.id_train_prdc.cpu().numpy()
                 self.detector = OneClassSVM(kernel="rbf", gamma="scale", nu=best_nu)
-                self.detector.fit(id_train_prdc_cpu)
+                self.detector.fit(id_train_prdc_np)
 
         self.is_fitted = True
         fit_time = time.time() - start_time
@@ -475,7 +480,7 @@ class ForteOODDetector:
                 scores = self.detector.decision_function(X_test_prdc_cpu)
         return scores
 
-    def predict(self, image_paths):
+    def predict(self, image_paths: List[str]) -> np.ndarray:
         """
         Predict OOD status.
 
@@ -486,8 +491,9 @@ class ForteOODDetector:
             np.ndarray: Binary predictions (1 for in-distribution, -1 for OOD).
         """
         scores = self._get_ood_scores(image_paths)
+        threshold: float
         if self.method == "ocsvm":
-            threshold = 0
+            threshold = 0.0
         else:
             if self.custom_detector:
                 ref_features = self.id_train_prdc
@@ -507,10 +513,11 @@ class ForteOODDetector:
                     id_scores = self.detector.score_samples(id_train_part1_np)
                 elif self.method == "kde":
                     id_scores = self.detector.logpdf(id_train_part1_np.T)
-            threshold = np.percentile(id_scores, 5)
-        return np.where(scores > threshold, 1, -1)
+            threshold = float(np.percentile(id_scores, 5))
+        predictions: np.ndarray = np.where(scores > threshold, 1, -1).astype(np.int64)
+        return predictions
 
-    def predict_proba(self, image_paths):
+    def predict_proba(self, image_paths: List[str]) -> np.ndarray:
         """
         Return normalized probability scores for OOD detection.
 
@@ -521,15 +528,16 @@ class ForteOODDetector:
             np.ndarray: Normalized scores.
         """
         scores = self._get_ood_scores(image_paths)
-        min_score = np.min(scores)
-        max_score = np.max(scores)
+        min_score: float = float(np.min(scores))
+        max_score: float = float(np.max(scores))
         if max_score > min_score:
             normalized_scores = (scores - min_score) / (max_score - min_score)
         else:
             normalized_scores = np.ones_like(scores) * 0.5
-        return normalized_scores
+        result: np.ndarray = np.asarray(normalized_scores)
+        return result
 
-    def evaluate(self, id_image_paths, ood_image_paths):
+    def evaluate(self, id_image_paths: List[str], ood_image_paths: List[str]) -> Dict[str, float]:
         """
         Evaluate the detector.
 
@@ -572,5 +580,5 @@ class ForteOODDetector:
         precision_vals, recall_vals, _ = precision_recall_curve(labels, scores_all)
         auprc = average_precision_score(labels, scores_all)
         f1_scores = 2 * (precision_vals * recall_vals) / (precision_vals + recall_vals + 1e-10)
-        f1_score = np.max(f1_scores)
+        f1_score: float = float(np.max(f1_scores))
         return {"AUROC": auroc, "FPR@95TPR": fpr95, "AUPRC": auprc, "F1": f1_score}

@@ -37,7 +37,7 @@ For the software package itself:
   year = {2025},
   publisher = {PyPI},
   version = {0.1.0},
-  url = {https://github.com/debargha/forte-detector}
+  url = {https://github.com/debarghag/forte-detector}
 }
 ```
 
@@ -114,7 +114,7 @@ Forte builds upon several excellent open-source projects:
 
 ## Contributing
 
-We welcome contributions from the community! Please see our [contributing guidelines](https://github.com/debargha/forte-detector/blob/main/CONTRIBUTING.md) for more information.
+We welcome contributions from the community! Please see our [contributing guidelines](https://github.com/debarghag/forte-detector/blob/main/CONTRIBUTING.md) for more information.
 
 ### How to Contribute
 
@@ -126,7 +126,7 @@ We welcome contributions from the community! Please see our [contributing guidel
 
 ### Reporting Issues
 
-Please report bugs and feature requests on our [GitHub Issues](https://github.com/debargha/forte-detector/issues) page.
+Please report bugs and feature requests on our [GitHub Issues](https://github.com/debarghag/forte-detector/issues) page.
 
 ## License
 
@@ -175,12 +175,12 @@ If you're interested in out-of-distribution detection, you may also find these w
 For questions, comments, or collaborations:
 
 - **Email**: debargha.ganguly@gmail.com
-- **GitHub**: [https://github.com/debargha/forte-detector](https://github.com/debargha/forte-detector)
-- **Issues**: [https://github.com/debargha/forte-detector/issues](https://github.com/debargha/forte-detector/issues)
+- **GitHub**: [https://github.com/debarghag/forte-detector](https://github.com/debarghag/forte-detector)
+- **Issues**: [https://github.com/debarghag/forte-detector/issues](https://github.com/debarghag/forte-detector/issues)
 
 ## Community
 
-- **Discussions**: [GitHub Discussions](https://github.com/debargha/forte-detector/discussions)
+- **Discussions**: [GitHub Discussions](https://github.com/debarghag/forte-detector/discussions)
 - **Twitter**: [Coming soon]
 - **Discord**: [Coming soon]
 

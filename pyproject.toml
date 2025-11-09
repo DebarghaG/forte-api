@@ -68,6 +68,8 @@ dev = [
     "flake8>=6.0.0",
     "isort>=5.12.0",
     "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "bandit>=1.7.0",
 ]
 docs = [
     "mkdocs>=1.5.0",
@@ -82,10 +84,10 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/debargha/forte-detector"
+Homepage = "https://github.com/debarghag/forte-detector"
 Documentation = "https://debarghag.github.io/forte-detector"
-"Source Code" = "https://github.com/debargha/forte-detector"
-"Bug Tracker" = "https://github.com/debargha/forte-detector/issues"
+"Source Code" = "https://github.com/debarghag/forte-detector"
+"Bug Tracker" = "https://github.com/debarghag/forte-detector/issues"
 "Paper" = "https://openreview.net/forum?id=7XNgVPxCiA"
 "ICLR 2025" = "https://openreview.net/forum?id=7XNgVPxCiA"
 
@@ -177,3 +179,19 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+[tool.bandit]
+exclude_dirs = ["tests", "env", ".venv", "venv"]
+skips = ["B101"]
+
+[tool.flake8]
+max-line-length = 100
+extend-ignore = ["E203", "W503", "D100", "D104"]
+per-file-ignores = [
+    "forte_api.py:D,F401,F841",
+    "forte_demo.py:D,F401",
+    "examples/*.py:D",
+    "tests/*.py:D",
+    "__init__.py:F401",
+]
+docstring-convention = "google"

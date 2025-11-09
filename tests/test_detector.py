@@ -2,9 +2,10 @@
 Tests for ForteOODDetector class.
 """
 
+import numpy as np
 import pytest
 import torch
-import numpy as np
+
 from forte import ForteOODDetector
 
 
@@ -18,23 +19,19 @@ class TestForteOODDetectorInit:
         assert detector.device in ["cuda:0", "mps", "cpu"]
         assert detector.embedding_dir == "./embeddings"
         assert detector.nearest_k == 5
-        assert detector.method == 'gmm'
+        assert detector.method == "gmm"
         assert not detector.is_fitted
 
     def test_custom_parameters(self, device, embedding_dir):
         """Test detector with custom parameters."""
         detector = ForteOODDetector(
-            batch_size=16,
-            device=device,
-            embedding_dir=embedding_dir,
-            nearest_k=10,
-            method='kde'
+            batch_size=16, device=device, embedding_dir=embedding_dir, nearest_k=10, method="kde"
         )
         assert detector.batch_size == 16
         assert detector.device == device
         assert detector.embedding_dir == embedding_dir
         assert detector.nearest_k == 10
-        assert detector.method == 'kde'
+        assert detector.method == "kde"
 
     @pytest.mark.parametrize("method", ["gmm", "kde", "ocsvm"])
     def test_all_methods(self, method, device, embedding_dir):
@@ -99,16 +96,16 @@ class TestForteOODDetectorFit:
         detector = ForteOODDetector(
             device="cpu",  # Use CPU to avoid downloading large models
             embedding_dir=embedding_dir,
-            method='gmm'
+            method="gmm",
         )
 
         # Note: This test would actually download models and run feature extraction
         # For unit tests, we might want to mock this
         # For now, we just check the structure exists
-        assert hasattr(detector, 'fit')
-        assert hasattr(detector, 'predict')
-        assert hasattr(detector, 'predict_proba')
-        assert hasattr(detector, 'evaluate')
+        assert hasattr(detector, "fit")
+        assert hasattr(detector, "predict")
+        assert hasattr(detector, "predict_proba")
+        assert hasattr(detector, "evaluate")
 
     def test_fit_sets_is_fitted(self, device):
         """Test that fit sets the is_fitted flag."""
@@ -186,9 +183,5 @@ class TestForteOODDetectorIntegration:
     def test_method_compatibility(self, device, embedding_dir):
         """Test all methods are compatible with device."""
         for method in ["gmm", "kde", "ocsvm"]:
-            detector = ForteOODDetector(
-                device=device,
-                embedding_dir=embedding_dir,
-                method=method
-            )
+            detector = ForteOODDetector(device=device, embedding_dir=embedding_dir, method=method)
             assert detector.method == method

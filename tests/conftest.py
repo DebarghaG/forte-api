@@ -3,11 +3,12 @@ Pytest configuration and shared fixtures for forte-detector tests.
 """
 
 import os
-import tempfile
 import shutil
+import tempfile
+
+import numpy as np
 import pytest
 import torch
-import numpy as np
 from PIL import Image
 
 
@@ -115,7 +116,4 @@ def sample_dataset():
     # Out-of-distribution: samples from N(5, 2)
     ood_samples = torch.randn(100, 10) * 2 + 5
 
-    return {
-        "id": id_samples,
-        "ood": ood_samples
-    }
+    return {"id": id_samples, "ood": ood_samples}

@@ -2,9 +2,10 @@
 Tests for custom PyTorch model implementations (TorchGMM, TorchKDE, TorchOCSVM).
 """
 
+import numpy as np
 import pytest
 import torch
-import numpy as np
+
 from forte.models import TorchGMM, TorchKDE, TorchOCSVM
 
 
@@ -85,8 +86,8 @@ class TestTorchKDE:
     def test_scotts_silverman_factor(self, device):
         """Test bandwidth factor calculations."""
         dataset = torch.randn(5, 20, device=device)
-        kde_scott = TorchKDE(dataset, bw_method='scott', device=device)
-        kde_silverman = TorchKDE(dataset, bw_method='silverman', device=device)
+        kde_scott = TorchKDE(dataset, bw_method="scott", device=device)
+        kde_silverman = TorchKDE(dataset, bw_method="silverman", device=device)
 
         assert kde_scott.factor > 0
         assert kde_silverman.factor > 0
@@ -94,7 +95,7 @@ class TestTorchKDE:
     def test_evaluate(self, device):
         """Test KDE evaluation."""
         dataset = torch.randn(5, 20, device=device)
-        kde = TorchKDE(dataset, bw_method='scott', device=device)
+        kde = TorchKDE(dataset, bw_method="scott", device=device)
 
         # Evaluate at test points
         test_points = torch.randn(5, 10, device=device)

@@ -16,7 +16,7 @@ The Forte library provides robust out-of-distribution (OOD) detection capabiliti
 This makes Forte particularly useful for real-world applications where anomalous data may be unexpected or unknown at training time. Our goal is to provide a non-opinionated middleware for OOD detection that seamlessly integrates into your ML deployment pipelines.
 
 **Why use Forte?**
-Forte OOD Detection serves as middleware between your data ingestion and ML inference systems, by preventing models from making predictions on data they weren't designed to handle. 
+Forte OOD Detection serves as middleware between your data ingestion and ML inference systems, by preventing models from making predictions on data they weren't designed to handle.
 
 ICICLE Tag : Foundation-AI
 
@@ -31,7 +31,7 @@ pip install forte-detector
 For development installation:
 
 ```bash
-git clone https://github.com/debargha/forte-detector.git
+git clone https://github.com/debarghag/forte-detector.git
 cd forte-detector
 pip install -e ".[dev]"
 ```
@@ -171,7 +171,7 @@ metrics = detector.evaluate(id_image_paths, ood_image_paths)
 print(f"AUROC: {metrics['AUROC']:.4f}")
 ```
 
-## Tutorial 
+## Tutorial
 
 ### Basic Usage
 

@@ -3,11 +3,12 @@ Integration tests for forte-detector package.
 These tests verify end-to-end functionality.
 """
 
+import os
+
+import numpy as np
 import pytest
 import torch
-import numpy as np
 from PIL import Image
-import os
 
 
 @pytest.mark.integration
@@ -31,11 +32,7 @@ class TestEndToEndWorkflow:
 
         for method in ["gmm", "kde", "ocsvm"]:
             detector = ForteOODDetector(
-                method=method,
-                device=device,
-                embedding_dir=embedding_dir,
-                batch_size=8,
-                nearest_k=3
+                method=method, device=device, embedding_dir=embedding_dir, batch_size=8, nearest_k=3
             )
             assert detector.method == method
             assert not detector.is_fitted
@@ -155,7 +152,7 @@ class TestDeviceCompatibility:
 
     @pytest.mark.skipif(
         not (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()),
-        reason="MPS not available"
+        reason="MPS not available",
     )
     def test_mps_device(self):
         """Test that everything works on MPS (Apple Silicon)."""
@@ -172,8 +169,9 @@ class TestCaching:
 
     def test_embedding_directory_creation(self, tmp_dir):
         """Test that embedding directory is created."""
-        from forte import ForteOODDetector
         import os
+
+        from forte import ForteOODDetector
 
         emb_dir = os.path.join(tmp_dir, "test_embeddings")
         detector = ForteOODDetector(embedding_dir=emb_dir, device="cpu")
@@ -183,6 +181,7 @@ class TestCaching:
     def test_feature_caching_structure(self, tmp_dir):
         """Test that feature caching saves files correctly."""
         import os
+
         from forte import ForteOODDetector
 
         emb_dir = os.path.join(tmp_dir, "cache_test")
@@ -206,9 +205,7 @@ class TestErrorHandling:
         from forte import ForteOODDetector
 
         detector = ForteOODDetector(
-            method="invalid_method",
-            device=device,
-            embedding_dir=embedding_dir
+            method="invalid_method", device=device, embedding_dir=embedding_dir
         )
         # Should initialize but may fail during fit
         assert detector.method == "invalid_method"
@@ -236,8 +233,9 @@ class TestReproducibility:
 
     def test_prdc_reproducibility(self, device):
         """Test that PRDC computation is reproducible."""
-        from forte import ForteOODDetector
         import numpy as np
+
+        from forte import ForteOODDetector
 
         # Set seeds
         torch.manual_seed(42)
@@ -259,8 +257,9 @@ class TestReproducibility:
 
     def test_model_fitting_reproducibility(self, device):
         """Test that model fitting is reproducible with same seed."""
-        from forte.models import TorchGMM
         import numpy as np
+
+        from forte.models import TorchGMM
 
         X = torch.randn(100, 10, device=device)
 

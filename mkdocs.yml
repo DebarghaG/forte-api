@@ -3,8 +3,8 @@ site_description: Finding Outliers with Representation Typicality Estimation - A
 site_author: Debargha Ganguly
 site_url: https://debarghag.github.io/forte-detector
 
-repo_name: debargha/forte-detector
-repo_url: https://github.com/debargha/forte-detector
+repo_name: debarghag/forte-detector
+repo_url: https://github.com/debarghag/forte-detector
 edit_uri: edit/main/docs/
 
 theme:

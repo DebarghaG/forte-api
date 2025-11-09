@@ -1,5 +1,4 @@
-"""
-Forte: Finding Outliers with Representation Typicality Estimation
+"""Forte: Finding Outliers with Representation Typicality Estimation.
 
 A PyTorch-based library for out-of-distribution (OOD) detection using
 topology-aware representation learning from multiple pretrained vision models.

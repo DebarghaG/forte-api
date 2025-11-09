@@ -50,7 +50,7 @@ For the latest development version:
 
 ```bash
 # Clone the repository
-git clone https://github.com/debargha/forte-detector.git
+git clone https://github.com/debarghag/forte-detector.git
 cd forte-detector
 
 # Install in editable mode

@@ -100,7 +100,7 @@ jobs:
       run: twine check dist/*
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dist
         path: dist/
@@ -124,7 +124,7 @@ jobs:
       run: mkdocs build --strict
 
     - name: Upload docs artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: docs
         path: site/

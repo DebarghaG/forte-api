@@ -140,7 +140,7 @@ If you use Forte in your research, please cite our ICLR 2025 paper:
 
 ## License
 
-Forte is released under the MIT License. See [LICENSE](https://github.com/debargha/forte-detector/blob/main/LICENSE) for details.
+Forte is released under the MIT License. See [LICENSE](https://github.com/debarghag/forte-detector/blob/main/LICENSE) for details.
 
 ## Acknowledgements
 

@@ -1,10 +1,10 @@
 site_name: Forte Detector
 site_description: Finding Outliers with Representation Typicality Estimation - A PyTorch library for OOD detection
 site_author: Debargha Ganguly
-site_url: https://debarghag.github.io/forte-detector
+site_url: https://debarghag.github.io/forte-api
 
-repo_name: debarghag/forte-detector
-repo_url: https://github.com/debarghag/forte-detector
+repo_name: DebarghaG/forte-api
+repo_url: https://github.com/DebarghaG/forte-api
 edit_uri: edit/main/docs/
 
 theme:
@@ -115,7 +115,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/debargha/forte-detector
+      link: https://github.com/DebarghaG/forte-api
     - icon: fontawesome/solid/paper-plane
       link: https://openreview.net/forum?id=7XNgVPxCiA
 

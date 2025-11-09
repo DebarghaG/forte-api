@@ -9,7 +9,7 @@ from tqdm import tqdm
 import time
 import argparse
 import logging
-from forte_api import ForteOODDetector
+from forte import ForteOODDetector
 
 # Configure logging
 logging.basicConfig(

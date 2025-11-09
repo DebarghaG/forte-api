@@ -1,4 +1,9 @@
-# Forte API Documentation
+# Forte: Finding Outliers with Representation Typicality Estimation
+
+[![PyPI version](https://badge.fury.io/py/forte-detector.svg)](https://badge.fury.io/py/forte-detector)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![ICLR 2025](https://img.shields.io/badge/ICLR-2025-red.svg)](https://openreview.net/forum?id=7XNgVPxCiA)
 
 ## Overview
 
@@ -15,6 +20,47 @@ Forte OOD Detection serves as middleware between your data ingestion and ML infe
 
 ICICLE Tag : Foundation-AI
 
+## Installation
+
+Install Forte from PyPI:
+
+```bash
+pip install forte-detector
+```
+
+For development installation:
+
+```bash
+git clone https://github.com/debargha/forte-detector.git
+cd forte-detector
+pip install -e ".[dev]"
+```
+
+## Quick Start
+
+```python
+from forte import ForteOODDetector
+
+# Initialize detector
+detector = ForteOODDetector(method='gmm', device='cuda:0')
+
+# Train on in-distribution images
+detector.fit(id_train_paths)
+
+# Detect outliers
+predictions = detector.predict(test_paths)
+scores = detector.predict_proba(test_paths)
+
+# Evaluate
+metrics = detector.evaluate(id_test_paths, ood_test_paths)
+print(f"AUROC: {metrics['AUROC']:.4f}")
+```
+
+## Documentation
+
+- **Full Documentation**: [https://debarghag.github.io/forte-detector](https://debarghag.github.io/forte-detector)
+- **Paper**: [ICLR 2025](https://openreview.net/forum?id=7XNgVPxCiA)
+- **Examples**: See `examples/` directory
 
 ## How-To Guide
 

@@ -1,6 +1,12 @@
+# Project-specific
 data/*
 embeddings/*
 *.png
+*.jpg
+*.jpeg
+
+# Keep example images if needed
+!docs/images/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -149,6 +155,7 @@ venv.bak/
 
 # mkdocs documentation
 /site
+site/
 
 # mypy
 .mypy_cache/

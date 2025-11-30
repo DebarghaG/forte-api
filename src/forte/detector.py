@@ -1,15 +1,19 @@
-import math
+"""
+Forte OOD Detector: Finding Outliers with Representation Typicality Estimation.
+
+This module implements the main ForteOODDetector class based on the ICLR 2025 paper.
+"""
+
 import os
 import time
+from typing import Dict, List
 
 import numpy as np
 import torch
-import torch.nn.functional as F
 from PIL import Image
 from scipy.stats import gaussian_kde
 from sklearn.metrics import (
     average_precision_score,
-    pairwise_distances,
     precision_recall_curve,
     roc_auc_score,
     roc_curve,
@@ -27,9 +31,7 @@ from transformers import (
     ViTMSNModel,
 )
 
-#############################################
-# ForteOODDetector Class
-#############################################
+from .models import TorchGMM, TorchKDE, TorchOCSVM
 
 
 class ForteOODDetector:
@@ -41,6 +43,12 @@ class ForteOODDetector:
 
     Detector training can use either a custom GPU-based implementation
     or fall back to CPU-based detectors from scikit-learn/SciPy.
+
+    Example:
+        >>> detector = ForteOODDetector(method='gmm', nearest_k=5)
+        >>> detector.fit(id_image_paths)
+        >>> predictions = detector.predict(test_image_paths)
+        >>> metrics = detector.evaluate(id_test_paths, ood_test_paths)
     """
 
     def __init__(
@@ -55,8 +63,6 @@ class ForteOODDetector:
             embedding_dir (str): Directory to store embeddings.
             nearest_k (int): Number of nearest neighbors for PRDC computation.
             method (str): Detector method ('gmm', 'kde', or 'ocsvm').
-            custom_detector (bool): If True, use our custom GPU-based implementations
-                                    (TorchGMM, TorchKDE, TorchOCSVM). If False, use CPU-based detectors.
         """
         self.batch_size = batch_size
         if device is None:
@@ -82,6 +88,7 @@ class ForteOODDetector:
         os.makedirs(self.embedding_dir, exist_ok=True)
 
     def _load_image(self, path):
+        """Load an image from path."""
         try:
             return Image.open(path).convert("RGB")
         except Exception as e:
@@ -174,7 +181,9 @@ class ForteOODDetector:
                 all_features[model_name] = loaded
                 if loaded.size(0) != len(image_paths):
                     print(
-                        f"Warning: Cached features count ({loaded.size(0)}) doesn't match image count ({len(image_paths)}). Recomputing for {model_name}."
+                        f"Warning: Cached features count ({loaded.size(0)}) doesn't "
+                        f"match image count ({len(image_paths)}). "
+                        f"Recomputing for {model_name}."
                     )
                     all_features[model_name] = []
                     models_to_process.append(model_name)
@@ -201,7 +210,8 @@ class ForteOODDetector:
                 )
                 torch.save(all_features[model_name], embedding_file)
                 print(
-                    f"Saved {model_name} features with shape {all_features[model_name].shape} to {embedding_file}"
+                    f"Saved {model_name} features with shape "
+                    f"{all_features[model_name].shape} to {embedding_file}"
                 )
             else:
                 all_features[model_name] = torch.empty(0, device=self.device)
@@ -278,7 +288,9 @@ class ForteOODDetector:
 
         return torch.stack((recall, density, precision, coverage), dim=1)
 
-    def fit(self, id_image_paths, val_split=0.2, random_state=42):
+    def fit(
+        self, id_image_paths: List[str], val_split: float = 0.2, random_state: int = 42
+    ) -> "ForteOODDetector":
         """
         Fit the OOD detector on in-distribution images.
 
@@ -288,7 +300,7 @@ class ForteOODDetector:
             random_state (int): Random seed.
 
         Returns:
-            self: The fitted detector.
+            ForteOODDetector: The fitted detector.
         """
         start_time = time.time()
         print(f"Fitting ForteOODDetector on {len(id_image_paths)} images...")
@@ -329,7 +341,8 @@ class ForteOODDetector:
         self.id_train_prdc = torch.cat(X_id_train_prdc, dim=1)  # still on GPU
         id_val_prdc = torch.cat(X_id_val_prdc, dim=1)
         print(
-            f"Combined PRDC features - Training: {self.id_train_prdc.shape}, Validation: {id_val_prdc.shape}"
+            f"Combined PRDC features - Training: {self.id_train_prdc.shape}, "
+            f"Validation: {id_val_prdc.shape}"
         )
 
         print(f"Training detector ({self.method}) with custom_detector={self.custom_detector}...")
@@ -345,15 +358,17 @@ class ForteOODDetector:
                     gmm.fit(self.id_train_prdc)
                     bic_val = gmm.bic(self.id_train_prdc)
                 else:
-                    id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
-                    gmm = GaussianMixture(
+                    id_train_prdc_cpu = self.id_train_prdc.cpu()
+                    id_train_prdc_np = id_train_prdc_cpu.numpy()
+                    gmm_sklearn: GaussianMixture = GaussianMixture(
                         n_components=n_components,
                         covariance_type="full",
                         random_state=random_state,
                         max_iter=100,
                     )
-                    gmm.fit(id_train_prdc_cpu)
-                    bic_val = gmm.bic(id_train_prdc_cpu)
+                    gmm_sklearn.fit(id_train_prdc_np)
+                    bic_val = float(gmm_sklearn.bic(id_train_prdc_np))
+                    gmm = gmm_sklearn
                 if bic_val < best_bic:
                     best_bic = bic_val
                     best_n_components = n_components
@@ -370,7 +385,7 @@ class ForteOODDetector:
 
         elif self.method == "ocsvm":
             if self.custom_detector:
-                best_accuracy = 0
+                best_accuracy = 0.0
                 best_nu = 0.01
                 best_model = None
                 for nu in [0.01, 0.05, 0.1, 0.2, 0.5]:
@@ -387,15 +402,15 @@ class ForteOODDetector:
                 print(f"Selected nu={best_nu} for TorchOCSVM with accuracy {best_accuracy:.4f}")
                 self.detector = best_model
             else:
-                best_accuracy = 0
+                best_accuracy = 0.0
                 best_nu = 0.01
                 for nu in [0.01, 0.05, 0.1, 0.2, 0.5]:
                     try:
-                        id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
+                        id_train_prdc_np = self.id_train_prdc.cpu().numpy()
                         ocsvm = OneClassSVM(kernel="rbf", gamma="scale", nu=nu)
-                        ocsvm.fit(id_train_prdc_cpu)
-                        val_pred = ocsvm.predict(id_train_prdc_cpu)
-                        accuracy = np.mean(val_pred == 1)
+                        ocsvm.fit(id_train_prdc_np)
+                        val_pred = ocsvm.predict(id_train_prdc_np)
+                        accuracy = float(np.mean(val_pred == 1))
                         if accuracy > best_accuracy:
                             best_accuracy = accuracy
                             best_nu = nu
@@ -403,9 +418,9 @@ class ForteOODDetector:
                         print(f"Error with nu={nu}: {e}")
                         continue
                 print(f"Selected nu={best_nu} for OCSVM with accuracy {best_accuracy:.4f}")
-                id_train_prdc_cpu = self.id_train_prdc.cpu().numpy()
+                id_train_prdc_np = self.id_train_prdc.cpu().numpy()
                 self.detector = OneClassSVM(kernel="rbf", gamma="scale", nu=best_nu)
-                self.detector.fit(id_train_prdc_cpu)
+                self.detector.fit(id_train_prdc_np)
 
         self.is_fitted = True
         fit_time = time.time() - start_time
@@ -435,7 +450,8 @@ class ForteOODDetector:
             id_train_part1 = ref_features[train_idx[:split]]
             test_tensor = test_features[model_name]
             print(
-                f"Computing test PRDC for {model_name}: {id_train_part1.shape} vs {test_tensor.shape}"
+                f"Computing test PRDC for {model_name}: "
+                f"{id_train_part1.shape} vs {test_tensor.shape}"
             )
             test_prdc = self._compute_prdc_features(id_train_part1, test_tensor)
             X_test_prdc.append(test_prdc)
@@ -464,7 +480,7 @@ class ForteOODDetector:
                 scores = self.detector.decision_function(X_test_prdc_cpu)
         return scores
 
-    def predict(self, image_paths):
+    def predict(self, image_paths: List[str]) -> np.ndarray:
         """
         Predict OOD status.
 
@@ -475,8 +491,9 @@ class ForteOODDetector:
             np.ndarray: Binary predictions (1 for in-distribution, -1 for OOD).
         """
         scores = self._get_ood_scores(image_paths)
+        threshold: float
         if self.method == "ocsvm":
-            threshold = 0
+            threshold = 0.0
         else:
             if self.custom_detector:
                 ref_features = self.id_train_prdc
@@ -496,10 +513,11 @@ class ForteOODDetector:
                     id_scores = self.detector.score_samples(id_train_part1_np)
                 elif self.method == "kde":
                     id_scores = self.detector.logpdf(id_train_part1_np.T)
-            threshold = np.percentile(id_scores, 5)
-        return np.where(scores > threshold, 1, -1)
+            threshold = float(np.percentile(id_scores, 5))
+        predictions: np.ndarray = np.where(scores > threshold, 1, -1).astype(np.int64)
+        return predictions
 
-    def predict_proba(self, image_paths):
+    def predict_proba(self, image_paths: List[str]) -> np.ndarray:
         """
         Return normalized probability scores for OOD detection.
 
@@ -510,15 +528,16 @@ class ForteOODDetector:
             np.ndarray: Normalized scores.
         """
         scores = self._get_ood_scores(image_paths)
-        min_score = np.min(scores)
-        max_score = np.max(scores)
+        min_score: float = float(np.min(scores))
+        max_score: float = float(np.max(scores))
         if max_score > min_score:
             normalized_scores = (scores - min_score) / (max_score - min_score)
         else:
             normalized_scores = np.ones_like(scores) * 0.5
-        return normalized_scores
+        result: np.ndarray = np.asarray(normalized_scores)
+        return result
 
-    def evaluate(self, id_image_paths, ood_image_paths):
+    def evaluate(self, id_image_paths: List[str], ood_image_paths: List[str]) -> Dict[str, float]:
         """
         Evaluate the detector.
 
@@ -544,10 +563,12 @@ class ForteOODDetector:
 
         print("\nScore Statistics:")
         print(
-            f"ID  - Mean: {np.mean(id_scores):.4f}, Std: {np.std(id_scores):.4f}, Min: {np.min(id_scores):.4f}, Max: {np.max(id_scores):.4f}"
+            f"ID  - Mean: {np.mean(id_scores):.4f}, Std: {np.std(id_scores):.4f}, "
+            f"Min: {np.min(id_scores):.4f}, Max: {np.max(id_scores):.4f}"
         )
         print(
-            f"OOD - Mean: {np.mean(ood_scores):.4f}, Std: {np.std(ood_scores):.4f}, Min: {np.min(ood_scores):.4f}, Max: {np.max(ood_scores):.4f}"
+            f"OOD - Mean: {np.mean(ood_scores):.4f}, Std: {np.std(ood_scores):.4f}, "
+            f"Min: {np.min(ood_scores):.4f}, Max: {np.max(ood_scores):.4f}"
         )
 
         labels = np.concatenate([np.ones(len(id_scores)), np.zeros(len(ood_scores))])
@@ -559,292 +580,5 @@ class ForteOODDetector:
         precision_vals, recall_vals, _ = precision_recall_curve(labels, scores_all)
         auprc = average_precision_score(labels, scores_all)
         f1_scores = 2 * (precision_vals * recall_vals) / (precision_vals + recall_vals + 1e-10)
-        f1_score = np.max(f1_scores)
+        f1_score: float = float(np.max(f1_scores))
         return {"AUROC": auroc, "FPR@95TPR": fpr95, "AUPRC": auprc, "F1": f1_score}
-
-
-###################################################
-# Custom Detectors: TorchGMM, TorchKDE, TorchOCSVM
-###################################################
-
-
-class TorchGMM:
-    def __init__(
-        self,
-        n_components=1,
-        covariance_type="full",
-        max_iter=100,
-        tol=1e-3,
-        reg_covar=1e-6,
-        device="cuda",
-    ):
-        """
-        A PyTorch implementation of a Gaussian Mixture Model that closely follows
-        scikit-learn's GaussianMixture (for the 'full' covariance case).
-
-        Parameters:
-            n_components (int): Number of mixture components.
-            covariance_type (str): Only 'full' is implemented in this example.
-            max_iter (int): Maximum number of iterations.
-            tol (float): Convergence threshold.
-            reg_covar (float): Non-negative regularization added to the diagonal of covariance matrices.
-            device (str): 'cuda' or 'cpu'.
-        """
-        if covariance_type != "full":
-            raise NotImplementedError("Only 'full' covariance is implemented.")
-        self.n_components = n_components
-        self.covariance_type = covariance_type
-        self.max_iter = max_iter
-        self.tol = tol
-        self.reg_covar = reg_covar
-        self.device = device
-
-        # Parameters to be learned
-        self.weights_ = None  # shape: (n_components,)
-        self.means_ = None  # shape: (n_components, n_features)
-        # shape: (n_components, n_features, n_features)
-        self.covariances_ = None
-        self.converged_ = False
-        self.lower_bound_ = -np.inf
-
-    def _initialize_parameters(self, X):
-        n_samples, n_features = X.shape
-        K = self.n_components
-        # Initialize weights uniformly
-        self.weights_ = torch.full((K,), 1.0 / K, device=self.device)
-        # Initialize means by randomly selecting K samples
-        indices = torch.randperm(n_samples, device=self.device)[:K]
-        self.means_ = X[indices].clone()
-        # Initialize covariances as diagonal matrices based on sample variance
-        variance = torch.var(X, dim=0) + self.reg_covar
-        self.covariances_ = torch.stack([torch.diag(variance) for _ in range(K)], dim=0)
-
-    def _estimate_log_gaussian_prob(self, X):
-        # X: (n_samples, n_features)
-        n_samples, n_features = X.shape
-        # Create a batched MultivariateNormal distribution for each component
-        mvn = torch.distributions.MultivariateNormal(
-            self.means_,
-            covariance_matrix=self.covariances_
-            + self.reg_covar * torch.eye(n_features, device=self.device),
-        )
-        # X has shape (n_samples, n_features); unsqueeze to (n_samples, 1, n_features) to broadcast over components
-        # Expected shape: (n_samples, n_components)
-        log_prob = mvn.log_prob(X.unsqueeze(1))
-        return log_prob
-
-    def _e_step(self, X):
-        # Compute log probabilities for each sample and each component
-        log_prob = self._estimate_log_gaussian_prob(X)  # shape: (n_samples, n_components)
-        # Add log weights
-        weighted_log_prob = log_prob + torch.log(self.weights_ + 1e-10)
-        # Compute log-sum-exp for each sample
-        log_prob_norm = torch.logsumexp(weighted_log_prob, dim=1, keepdim=True)
-        # Compute responsibilities: r_ik = exp(weighted_log_prob - log_prob_norm)
-        log_resp = weighted_log_prob - log_prob_norm
-        resp = torch.exp(log_resp)
-        return resp, log_prob_norm.sum().item()
-
-    def _m_step(self, X, resp):
-        n_samples, n_features = X.shape
-        Nk = resp.sum(dim=0)  # shape: (n_components,)
-        self.weights_ = Nk / n_samples
-        # Update means
-        self.means_ = (resp.t() @ X) / (Nk.unsqueeze(1) + 1e-10)
-        # Update covariances
-        K = self.n_components
-        covariances = []
-        for k in range(K):
-            diff = X - self.means_[k]
-            weighted_diff = diff * resp[:, k].unsqueeze(1)
-            cov_k = (weighted_diff.t() @ diff) / (Nk[k] + 1e-10)
-            # Add regularization for numerical stability
-            cov_k = cov_k + self.reg_covar * torch.eye(n_features, device=self.device)
-            covariances.append(cov_k)
-        self.covariances_ = torch.stack(covariances, dim=0)
-
-    def fit(self, X):
-        """
-        Fit the GMM model on data X.
-
-        Parameters:
-            X (torch.Tensor): Input data of shape (n_samples, n_features) on self.device.
-
-        Returns:
-            self
-        """
-        X = X.to(self.device)
-        self._initialize_parameters(X)
-        lower_bound = -np.inf
-
-        for i in range(self.max_iter):
-            resp, curr_lower_bound = self._e_step(X)
-            self._m_step(X, resp)
-            change = abs(curr_lower_bound - lower_bound)
-            lower_bound = curr_lower_bound
-            if change < self.tol:
-                self.converged_ = True
-                break
-        self.lower_bound_ = lower_bound
-        return self
-
-    def score_samples(self, X):
-        """
-        Compute the log-likelihood of each sample under the model.
-
-        Parameters:
-            X (torch.Tensor): Data of shape (n_samples, n_features) on self.device.
-
-        Returns:
-            torch.Tensor: Log probability for each sample.
-        """
-        X = X.to(self.device)
-        log_prob = self._estimate_log_gaussian_prob(X)
-        weighted_log_prob = log_prob + torch.log(self.weights_ + 1e-10)
-        log_prob_norm = torch.logsumexp(weighted_log_prob, dim=1)
-        return log_prob_norm
-
-    def bic(self, X):
-        """
-        Bayesian Information Criterion for the current model.
-
-        Parameters:
-            X (torch.Tensor): Data of shape (n_samples, n_features) on self.device.
-
-        Returns:
-            float: BIC value.
-        """
-        n_samples, n_features = X.shape
-        p = (
-            (self.n_components - 1)
-            + self.n_components * n_features
-            + self.n_components * n_features * (n_features + 1) / 2
-        )
-        log_likelihood = self.score_samples(X).sum().item()
-        return -2 * log_likelihood + p * np.log(n_samples)
-
-
-class TorchKDE:
-    def __init__(self, dataset, bw_method=None, weights=None, device="cuda"):
-        # Use float32 for MPS devices, otherwise float64.
-        dtype = torch.float32 if "mps" in device.lower() else torch.float64
-        self.device = device
-        self.dataset = dataset  # shape: (d, n)
-        self.d, self.n = self.dataset.shape
-
-        # Process weights (assumed to be a torch.Tensor on device if provided).
-        if weights is not None:
-            self.weights = (weights / weights.sum()).to(dtype=torch.float32)
-            self.neff = (self.weights.sum() ** 2) / (self.weights**2).sum()
-            # Weighted covariance: cov = sum_i w_i (x_i - mean)(x_i - mean)^T / (1 - sum(w_i^2))
-            weighted_mean = (self.dataset * self.weights.unsqueeze(0)).sum(dim=1, keepdim=True)
-            diff = self.dataset - weighted_mean
-            cov = (diff * self.weights.unsqueeze(0)) @ diff.T / (1 - (self.weights**2).sum())
-        else:
-            self.weights = torch.full(
-                (self.n,), 1.0 / self.n, dtype=torch.float32, device=self.device
-            )
-            self.neff = self.n
-            weighted_mean = self.dataset.mean(dim=1, keepdim=True)
-            diff = self.dataset - weighted_mean
-            cov = diff @ diff.T / (self.n - 1)
-        self._data_covariance = cov  # computed entirely on GPU
-
-        # Set bandwidth and compute scaled covariance.
-        self.set_bandwidth(bw_method)
-
-    def scotts_factor(self):
-        return self.neff ** (-1.0 / (self.d + 4))
-
-    def silverman_factor(self):
-        return (self.neff * (self.d + 2) / 4.0) ** (-1.0 / (self.d + 4))
-
-    def set_bandwidth(self, bw_method=None):
-        if bw_method is None or bw_method == "scott":
-            self.factor = self.scotts_factor()
-        elif bw_method == "silverman":
-            self.factor = self.silverman_factor()
-        elif isinstance(bw_method, (int, float)):
-            self.factor = float(bw_method)
-        elif callable(bw_method):
-            self.factor = float(bw_method(self))
-        else:
-            raise ValueError("Invalid bw_method.")
-        self._compute_covariance()
-
-    def _compute_covariance(self):
-        # Scale the data covariance by the bandwidth factor squared.
-        self.covariance = self._data_covariance * (self.factor**2)
-        # Increase regularization to ensure positive definiteness.
-        reg = 1e-6
-        self.cho_cov = torch.linalg.cholesky(
-            self.covariance + reg * torch.eye(self.d, device=self.device, dtype=self.dataset.dtype)
-        )
-        self.log_det = 2.0 * torch.log(torch.diag(self.cho_cov)).sum()
-
-    def evaluate(self, points):
-        # Assume points is already a torch.Tensor on the proper device.
-        if points.dim() == 1:
-            points = points.unsqueeze(0)
-        # If points are provided in (n, d) format (n > d), transpose them to (d, m)
-        if points.shape[0] > points.shape[1]:
-            points = points.T
-        if points.shape[0] != self.d:
-            raise ValueError(
-                f"Expected input with one dimension = {self.d}, but got shape {points.shape}"
-            )
-        # Compute differences: shape (d, n, m)
-        diff = self.dataset.unsqueeze(2) - points.unsqueeze(1)
-        # Flatten differences for cholesky_solve: (d, n*m)
-        diff_flat = diff.reshape(self.d, -1)
-        sol_flat = torch.cholesky_solve(diff_flat, self.cho_cov)
-        sol = sol_flat.view(diff.shape)
-        energy = 0.5 * (diff * sol).sum(dim=0)  # shape: (n, m)
-        result = torch.exp(-energy).T @ self.weights  # shape: (m,)
-        norm_const = torch.exp(-self.log_det) / ((2 * math.pi) ** (self.d / 2))
-        return result * norm_const
-
-    def logpdf(self, points):
-        return torch.log(self.evaluate(points) + 1e-10)
-
-    __call__ = evaluate
-
-
-class TorchOCSVM:
-    def __init__(self, nu=0.1, n_iters=1000, lr=1e-3, device="cuda"):
-        self.nu = nu
-        self.n_iters = n_iters
-        self.lr = lr
-        self.device = device
-        self.w = None
-        self.rho = None
-
-    def fit(self, X):
-        # Ensure X is on the correct device.
-        X = X.to(self.device)
-        n, d = X.shape
-        # Initialize w and rho as nn.Parameter to ensure they are leaf tensors.
-        self.w = torch.nn.Parameter(torch.randn(d, device=self.device) * 0.01)
-        self.rho = torch.nn.Parameter(torch.tensor(0.0, device=self.device))
-        # TODO: Adam is a good default choice, we can try SGD or adding a learning rate scheduler to adapt the learning rate during training.
-        optimizer = torch.optim.Adam([self.w, self.rho], lr=self.lr)
-        for i in range(self.n_iters):
-            optimizer.zero_grad()
-            scores = X @ self.w  # shape: (n,)
-            # Compute slack = max(0, rho - w^T x) for each sample.
-            # apply a smooth approximation?
-            slack = torch.clamp(self.rho - scores, min=0)
-            loss = 0.5 * torch.norm(self.w) ** 2 - self.rho + (1 / (self.nu * n)) * slack.sum()
-            loss.backward()
-            optimizer.step()
-            if (i + 1) % 200 == 0:
-                print(f"OCSVM iter {i+1}/{self.n_iters}, loss: {loss.item():.4f}")
-        return self
-
-    def decision_function(self, X):
-        X = X.to(self.device)
-        return X @ self.w - self.rho
-
-    def predict(self, X):
-        decision = self.decision_function(X)
-        return torch.where(decision >= 0, 1, -1)

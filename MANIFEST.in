@@ -1,0 +1,28 @@
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Include package configuration
+include pyproject.toml
+include setup.py
+
+# Exclude development and build files
+exclude .gitignore
+exclude .git*
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+
+# Exclude tests, docs, and examples from distribution
+recursive-exclude tests *
+recursive-exclude docs *
+recursive-exclude examples *
+recursive-exclude env *
+recursive-exclude embeddings *
+recursive-exclude data *
+
+# Exclude build artifacts
+recursive-exclude dist *
+recursive-exclude build *
+recursive-exclude *.egg-info *

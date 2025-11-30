@@ -1,0 +1,24 @@
+/* Custom CSS for Forte Detector documentation */
+
+:root {
+  --forte-primary: #3f51b5;
+  --forte-accent: #ff4081;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+}
+
+.md-typeset code {
+  background-color: rgba(63, 81, 181, 0.1);
+}
+
+/* Custom admonition for paper references */
+.md-typeset .admonition.paper {
+  border-left-color: var(--forte-primary);
+}
+
+/* Improved table styling */
+.md-typeset table:not([class]) {
+  font-size: 0.85em;
+}

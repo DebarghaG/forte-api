@@ -88,8 +88,8 @@ Homepage = "https://github.com/debarghag/forte-detector"
 Documentation = "https://debarghag.github.io/forte-detector"
 "Source Code" = "https://github.com/debarghag/forte-detector"
 "Bug Tracker" = "https://github.com/debarghag/forte-detector/issues"
-"Paper" = "https://openreview.net/forum?id=7XNgVPxCiA"
-"ICLR 2025" = "https://openreview.net/forum?id=7XNgVPxCiA"
+"Paper" = "https://openreview.net/pdf?id=7XNgVPxCiA"
+"ICLR 2025" = "https://openreview.net/pdf?id=7XNgVPxCiA"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

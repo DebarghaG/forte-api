@@ -50,13 +50,13 @@ nav:
   - Home: index.md
   - Getting Started:
       - Installation: installation.md
-      - Quick Start: quickstart.md
-  - User Guide:
-      - Overview: user-guide.md
+      - Quickstart: quickstart.md
+  - Reference:
+      - Algorithm: methods.md
+      - Configuration: user-guide.md
+      - API: api-reference.md
       - Examples: examples.md
-      - Methods: methods.md
-  - API Reference: api-reference.md
-  - Citation & Acknowledgements: citation.md
+  - Citation: citation.md
 
 plugins:
   - search
@@ -117,7 +117,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/DebarghaG/forte-api
     - icon: fontawesome/solid/paper-plane
-      link: https://openreview.net/forum?id=7XNgVPxCiA
+      link: https://openreview.net/pdf?id=7XNgVPxCiA
 
   version:
     provider: mike

@@ -15,25 +15,28 @@
         <link rel="canonical" href="https://debarghag.github.io/forte-api/user-guide/">
       
       
-        <link rel="prev" href="../quickstart/">
+        <link rel="prev" href="../methods/">
       
       
-        <link rel="next" href="../examples/">
+        <link rel="next" href="../api-reference/">
+      
+      
+        
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
       
-        <title>Overview - Forte Detector</title>
+        <title>Configuration - Forte Detector</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -62,7 +65,6 @@
 
     
     
-    
   </head>
   
   
@@ -82,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#user-guide" class="md-skip">
+        <a href="#configuration" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +122,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              Configuration
             
           </span>
         </div>
@@ -276,34 +278,15 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../methods/" class="md-tabs__link">
           
   
   
-  User Guide
+  Reference
 
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../api-reference/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  API Reference
-
-      </a>
-    </li>
   
 
       
@@ -319,7 +302,7 @@
   
     
   
-  Citation & Acknowledgements
+  Citation
 
       </a>
     </li>
@@ -383,9 +366,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Home
+  
+
     
   </span>
+  
   
 
       </a>
@@ -423,9 +411,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Getting Started
+  
+
     
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
@@ -434,7 +427,11 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Getting Started
+            
+  
+    Getting Started
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -450,9 +447,14 @@
   
   
   <span class="md-ellipsis">
+    
+  
     Installation
+  
+
     
   </span>
+  
   
 
       </a>
@@ -473,9 +475,14 @@
   
   
   <span class="md-ellipsis">
-    Quick Start
+    
+  
+    Quickstart
+  
+
     
   </span>
+  
   
 
       </a>
@@ -524,9 +531,14 @@
   
   
   <span class="md-ellipsis">
-    User Guide
+    
+  
+    Reference
+  
+
     
   </span>
+  
   
 
             <span class="md-nav__icon md-icon"></span>
@@ -535,9 +547,41 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            User Guide
+            
+  
+    Reference
+  
+
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -560,9 +604,14 @@
   
   
   <span class="md-ellipsis">
-    Overview
+    
+  
+    Configuration
+  
+
     
   </span>
+  
   
 
           <span class="md-nav__icon md-icon"></span>
@@ -573,9 +622,14 @@
   
   
   <span class="md-ellipsis">
-    Overview
+    
+  
+    Configuration
+  
+
     
   </span>
+  
   
 
       </a>
@@ -596,190 +650,89 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      
+        Parameters
+      
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-concepts" class="md-nav__link">
+  <a href="#method-selection" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Concepts
+      
+        Method Selection
+      
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Core Concepts">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#feature-extraction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Feature Extraction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prdc-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      PRDC Features
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#detection-methods" class="md-nav__link">
-    <span class="md-ellipsis">
-      Detection Methods
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      API Usage
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#initialization" class="md-nav__link">
-    <span class="md-ellipsis">
-      Initialization
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#training" class="md-nav__link">
-    <span class="md-ellipsis">
-      Training
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prediction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Prediction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#evaluation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Evaluation
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advanced Features
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Advanced Features">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#feature-caching" class="md-nav__link">
-    <span class="md-ellipsis">
-      Feature Caching
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#device-selection" class="md-nav__link">
     <span class="md-ellipsis">
-      Device Selection
+      
+        Device Selection
+      
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#method-comparison" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#caching" class="md-nav__link">
     <span class="md-ellipsis">
-      Method Comparison
+      
+        Caching
+      
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hyperparameter-tuning" class="md-nav__link">
     <span class="md-ellipsis">
-      Hyperparameter Tuning
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Best Practices
+        Hyperparameter Tuning
+      
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Best Practices">
+    <nav class="md-nav" aria-label="Hyperparameter Tuning">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#data-preparation" class="md-nav__link">
+  <a href="#nearest_k" class="md-nav__link">
     <span class="md-ellipsis">
-      Data Preparation
+      
+        nearest_k
+      
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#performance-optimization" class="md-nav__link">
+  <a href="#val_split" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Optimization
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#common-patterns" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common Patterns
+      
+        val_split
+      
     </span>
   </a>
   
@@ -791,51 +744,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#reproducibility" class="md-nav__link">
     <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#out-of-memory-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      Out of Memory Errors
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#slow-performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Slow Performance
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poor-detection-performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Poor Detection Performance
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      Next Steps
+        Reproducibility
+      
     </span>
   </a>
   
@@ -857,14 +770,19 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/" class="md-nav__link">
+      <a href="../api-reference/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Examples
+    
+  
+    API
+  
+
     
   </span>
+  
   
 
       </a>
@@ -880,14 +798,19 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/" class="md-nav__link">
+      <a href="../examples/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Methods
+    
+  
+    Examples
+  
+
     
   </span>
+  
   
 
       </a>
@@ -910,36 +833,19 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    API Reference
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../citation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Citation & Acknowledgements
+    
+  
+    Citation
+  
+
     
   </span>
+  
   
 
       </a>
@@ -974,190 +880,89 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      
+        Parameters
+      
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-concepts" class="md-nav__link">
+  <a href="#method-selection" class="md-nav__link">
     <span class="md-ellipsis">
-      Core Concepts
+      
+        Method Selection
+      
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Core Concepts">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#feature-extraction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Feature Extraction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prdc-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      PRDC Features
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#detection-methods" class="md-nav__link">
-    <span class="md-ellipsis">
-      Detection Methods
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      API Usage
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#initialization" class="md-nav__link">
-    <span class="md-ellipsis">
-      Initialization
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#training" class="md-nav__link">
-    <span class="md-ellipsis">
-      Training
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prediction" class="md-nav__link">
-    <span class="md-ellipsis">
-      Prediction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#evaluation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Evaluation
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advanced Features
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Advanced Features">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#feature-caching" class="md-nav__link">
-    <span class="md-ellipsis">
-      Feature Caching
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#device-selection" class="md-nav__link">
     <span class="md-ellipsis">
-      Device Selection
+      
+        Device Selection
+      
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#method-comparison" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#caching" class="md-nav__link">
     <span class="md-ellipsis">
-      Method Comparison
+      
+        Caching
+      
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hyperparameter-tuning" class="md-nav__link">
     <span class="md-ellipsis">
-      Hyperparameter Tuning
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Best Practices
+        Hyperparameter Tuning
+      
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Best Practices">
+    <nav class="md-nav" aria-label="Hyperparameter Tuning">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#data-preparation" class="md-nav__link">
+  <a href="#nearest_k" class="md-nav__link">
     <span class="md-ellipsis">
-      Data Preparation
+      
+        nearest_k
+      
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#performance-optimization" class="md-nav__link">
+  <a href="#val_split" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Optimization
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#common-patterns" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common Patterns
+      
+        val_split
+      
     </span>
   </a>
   
@@ -1169,51 +974,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#reproducibility" class="md-nav__link">
     <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#out-of-memory-errors" class="md-nav__link">
-    <span class="md-ellipsis">
-      Out of Memory Errors
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#slow-performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Slow Performance
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poor-detection-performance" class="md-nav__link">
-    <span class="md-ellipsis">
-      Poor Detection Performance
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      Next Steps
+        Reproducibility
+      
     </span>
   </a>
   
@@ -1229,6 +994,7 @@
           
           
             <div class="md-content" data-md-component="content">
+              
               <article class="md-content__inner md-typeset">
                 
                   
@@ -1238,243 +1004,133 @@
   
 
 
-<h1 id="user-guide">User Guide<a class="headerlink" href="#user-guide" title="Permanent link">&para;</a></h1>
-<p>Complete guide to using Forte for out-of-distribution detection.</p>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>Forte provides a simple yet powerful API for detecting out-of-distribution images using pretrained vision models and topology-aware features.</p>
-<h2 id="core-concepts">Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
-<h3 id="feature-extraction">Feature Extraction<a class="headerlink" href="#feature-extraction" title="Permanent link">&para;</a></h3>
-<p>Forte uses three pretrained models to extract complementary features:</p>
-<ol>
-<li><strong>CLIP</strong> (<code>openai/clip-vit-base-patch32</code>): 512-dimensional features, text-image aligned</li>
-<li><strong>ViT-MSN</strong> (<code>facebook/vit-msn-base</code>): 768-dimensional features, self-supervised</li>
-<li><strong>DINOv2</strong> (<code>facebook/dinov2-base</code>): 768-dimensional features, self-distilled</li>
-</ol>
-<h3 id="prdc-features">PRDC Features<a class="headerlink" href="#prdc-features" title="Permanent link">&para;</a></h3>
-<p>For each model's features, Forte computes 4 topology-aware metrics:</p>
-<ul>
-<li><strong>Precision</strong>: Measures if test samples fall within the manifold of reference data</li>
-<li><strong>Recall</strong>: Measures coverage of the reference distribution</li>
-<li><strong>Density</strong>: Local density estimation using k-NN</li>
-<li><strong>Coverage</strong>: Mode coverage of the distribution</li>
-</ul>
-<p>This results in 12 total features (3 models × 4 PRDC metrics) used for detection.</p>
-<h3 id="detection-methods">Detection Methods<a class="headerlink" href="#detection-methods" title="Permanent link">&para;</a></h3>
-<p>Forte supports three anomaly detection methods:</p>
-<h4 id="gaussian-mixture-models-gmm">Gaussian Mixture Models (GMM)<a class="headerlink" href="#gaussian-mixture-models-gmm" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Automatically selects the number of components (1-64) using BIC</li>
-<li>Best for complex, multi-modal distributions</li>
-<li>Recommended for most use cases</li>
-</ul>
-<h4 id="kernel-density-estimation-kde">Kernel Density Estimation (KDE)<a class="headerlink" href="#kernel-density-estimation-kde" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Non-parametric density estimation</li>
-<li>Good for small datasets (&lt;1000 samples)</li>
-<li>Uses Scott's rule for bandwidth selection</li>
-</ul>
-<h4 id="one-class-svm-ocsvm">One-Class SVM (OCSVM)<a class="headerlink" href="#one-class-svm-ocsvm" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Learns a decision boundary around in-distribution data</li>
-<li>Fast inference</li>
-<li>Good when ID and OOD are clearly separated</li>
-</ul>
-<h2 id="api-usage">API Usage<a class="headerlink" href="#api-usage" title="Permanent link">&para;</a></h2>
-<h3 id="initialization">Initialization<a class="headerlink" href="#initialization" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">forte</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForteOODDetector</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>                    <span class="c1"># Batch size for processing</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:0&#39;</span><span class="p">,</span>                  <span class="c1"># Device: &#39;cuda:0&#39;, &#39;mps&#39;, or &#39;cpu&#39;</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">embedding_dir</span><span class="o">=</span><span class="s1">&#39;./embeddings&#39;</span><span class="p">,</span>     <span class="c1"># Cache directory for features</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">nearest_k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>                       <span class="c1"># k for k-NN in PRDC</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gmm&#39;</span>                      <span class="c1"># Detection method</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+<h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>method</code></td>
+<td>str</td>
+<td><code>'gmm'</code></td>
+<td><code>'gmm'</code>, <code>'kde'</code>, or <code>'ocsvm'</code></td>
+</tr>
+<tr>
+<td><code>nearest_k</code></td>
+<td>int</td>
+<td>5</td>
+<td>k for k-NN manifold estimation</td>
+</tr>
+<tr>
+<td><code>batch_size</code></td>
+<td>int</td>
+<td>32</td>
+<td>Images per GPU forward pass</td>
+</tr>
+<tr>
+<td><code>device</code></td>
+<td>str</td>
+<td>auto</td>
+<td><code>'cuda:N'</code>, <code>'mps'</code>, <code>'cpu'</code></td>
+</tr>
+<tr>
+<td><code>embedding_dir</code></td>
+<td>str</td>
+<td><code>'./embeddings'</code></td>
+<td>Feature cache directory</td>
+</tr>
+</tbody>
+</table>
+<h2 id="method-selection">Method Selection<a class="headerlink" href="#method-selection" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Best for</th>
+<th>Hyperparameter tuning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GMM</td>
+<td>Multi-modal distributions</td>
+<td>Components via BIC (1-64)</td>
+</tr>
+<tr>
+<td>KDE</td>
+<td>Small datasets, smooth boundaries</td>
+<td>Bandwidth via Scott's rule</td>
+</tr>
+<tr>
+<td>OCSVM</td>
+<td>Large datasets, fast inference</td>
+<td>nu via validation (0.01-0.5)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="device-selection">Device Selection<a class="headerlink" href="#device-selection" title="Permanent link">&para;</a></h2>
+<p>Auto-detection priority: CUDA &gt; MPS &gt; CPU</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Force specific device</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:1&#39;</span><span class="p">)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
 </span></code></pre></div>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><code>batch_size</code> (int, default=32): Number of images to process at once. Increase for faster GPU processing.</li>
-<li><code>device</code> (str, optional): Computation device. Auto-detected if not specified.</li>
-<li><code>embedding_dir</code> (str, default='./embeddings'): Directory to cache extracted features.</li>
-<li><code>nearest_k</code> (int, default=5): Number of nearest neighbors for PRDC computation.</li>
-<li><code>method</code> (str, default='gmm'): Detection method - 'gmm', 'kde', or 'ocsvm'.</li>
-</ul>
-<h3 id="training">Training<a class="headerlink" href="#training" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">id_image_paths</span><span class="p">,</span>     <span class="c1"># List of paths to in-distribution images</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">val_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>      <span class="c1"># Validation split fraction</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>     <span class="c1"># Random seed for reproducibility</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
+<h2 id="caching">Caching<a class="headerlink" href="#caching" title="Permanent link">&para;</a></h2>
+<p>Features cached to <code>{embedding_dir}/{name}_{model}_features.pt</code></p>
+<p>Cache is reused if file exists and sample count matches. Delete to force recomputation:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>rm<span class="w"> </span>-rf<span class="w"> </span>./embeddings
 </span></code></pre></div>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><code>id_image_paths</code> (list): Paths to in-distribution training images</li>
-<li><code>val_split</code> (float, default=0.2): Fraction of data for validation</li>
-<li><code>random_state</code> (int, default=42): Random seed</li>
-</ul>
-<p><strong>Returns:</strong> <code>self</code> (the fitted detector)</p>
-<h3 id="prediction">Prediction<a class="headerlink" href="#prediction" title="Permanent link">&para;</a></h3>
-<h4 id="binary-prediction">Binary Prediction<a class="headerlink" href="#binary-prediction" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">predictions</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image_paths</span><span class="p">)</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># Returns: numpy array of 1 (ID) or -1 (OOD)</span>
+<h2 id="memory">Memory<a class="headerlink" href="#memory" title="Permanent link">&para;</a></h2>
+<p>GPU memory usage:
+- Models: ~2-3 GB (CLIP + ViT-MSN + DINOv2)
+- Features: ~4 bytes × n_samples × 2048 (all model dims)
+- PRDC distances: O(n²) temporary</p>
+<p>Reduce <code>batch_size</code> if OOM.</p>
+<h2 id="hyperparameter-tuning">Hyperparameter Tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permanent link">&para;</a></h2>
+<h3 id="nearest_k">nearest_k<a class="headerlink" href="#nearest_k" title="Permanent link">&para;</a></h3>
+<p>Controls manifold resolution. Larger k = smoother estimates, less sensitive to noise.</p>
+<table>
+<thead>
+<tr>
+<th>Dataset size</th>
+<th>Recommended k</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;1000</td>
+<td>3-5</td>
+</tr>
+<tr>
+<td>1000-10000</td>
+<td>5-10</td>
+</tr>
+<tr>
+<td>&gt;10000</td>
+<td>10-20</td>
+</tr>
+</tbody>
+</table>
+<h3 id="val_split">val_split<a class="headerlink" href="#val_split" title="Permanent link">&para;</a></h3>
+<p>Fraction of training data used for hyperparameter selection.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">val_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># 90% train, 10% validation</span>
 </span></code></pre></div>
-<h4 id="probability-scores">Probability Scores<a class="headerlink" href="#probability-scores" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">scores</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">image_paths</span><span class="p">)</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Returns: numpy array of values in [0, 1]</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Higher values = more likely in-distribution</span>
+<h2 id="reproducibility">Reproducibility<a class="headerlink" href="#reproducibility" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </span></code></pre></div>
-<h3 id="evaluation">Evaluation<a class="headerlink" href="#evaluation" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">metrics</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">id_test_paths</span><span class="p">,</span> <span class="n">ood_test_paths</span><span class="p">)</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Returns dict with: AUROC, FPR@95TPR, AUPRC, F1</span>
-</span></code></pre></div>
-<h2 id="advanced-features">Advanced Features<a class="headerlink" href="#advanced-features" title="Permanent link">&para;</a></h2>
-<h3 id="feature-caching">Feature Caching<a class="headerlink" href="#feature-caching" title="Permanent link">&para;</a></h3>
-<p>Forte automatically caches extracted features to speed up repeated experiments:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># First run: extracts and caches features</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">detector1</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">embedding_dir</span><span class="o">=</span><span class="s1">&#39;./my_cache&#39;</span><span class="p">)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">detector1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">)</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Second run: loads cached features (much faster!)</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">detector2</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">embedding_dir</span><span class="o">=</span><span class="s1">&#39;./my_cache&#39;</span><span class="p">)</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">detector2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">)</span>  <span class="c1"># Reuses cached features</span>
-</span></code></pre></div>
-<p>To force recomputation:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>rm<span class="w"> </span>-rf<span class="w"> </span>./my_cache
-</span></code></pre></div></p>
-<h3 id="device-selection">Device Selection<a class="headerlink" href="#device-selection" title="Permanent link">&para;</a></h3>
-<h4 id="automatic-device-selection">Automatic Device Selection<a class="headerlink" href="#automatic-device-selection" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Automatically selects best available device</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">()</span>  <span class="c1"># cuda:0 &gt; mps &gt; cpu</span>
-</span></code></pre></div>
-<h4 id="manual-device-selection">Manual Device Selection<a class="headerlink" href="#manual-device-selection" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Force CPU (useful for debugging)</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Specific CUDA device</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:1&#39;</span><span class="p">)</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Apple Silicon</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;mps&#39;</span><span class="p">)</span>
-</span></code></pre></div>
-<h3 id="method-comparison">Method Comparison<a class="headerlink" href="#method-comparison" title="Permanent link">&para;</a></h3>
-<p>Compare different detection methods:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gmm&#39;</span><span class="p">,</span> <span class="s1">&#39;kde&#39;</span><span class="p">,</span> <span class="s1">&#39;ocsvm&#39;</span><span class="p">]:</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">embedding_dir</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;./cache_</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">)</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">results</span><span class="p">[</span><span class="n">method</span><span class="p">]</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">id_test_paths</span><span class="p">,</span> <span class="n">ood_test_paths</span><span class="p">)</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Print comparison</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">: AUROC=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;AUROC&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, FPR@95TPR=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;FPR@95TPR&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<h3 id="hyperparameter-tuning">Hyperparameter Tuning<a class="headerlink" href="#hyperparameter-tuning" title="Permanent link">&para;</a></h3>
-<h4 id="nearest_k">nearest_k<a class="headerlink" href="#nearest_k" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Try different k values</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]:</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">nearest_k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">)</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">id_test_paths</span><span class="p">,</span> <span class="n">ood_test_paths</span><span class="p">)</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: AUROC=</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;AUROC&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<h4 id="validation-split">Validation Split<a class="headerlink" href="#validation-split" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Use more data for training (less for validation)</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">,</span> <span class="n">val_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># 90% train, 10% val</span>
-</span></code></pre></div>
-<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
-<h3 id="data-preparation">Data Preparation<a class="headerlink" href="#data-preparation" title="Permanent link">&para;</a></h3>
-<p>✅ <strong>Do:</strong>
-- Use high-quality images (&gt;224×224 pixels)
-- Ensure consistent image format (JPEG, PNG)
-- Have at least 500-1000 training images
-- Balance your test set (equal ID and OOD samples)</p>
-<p>❌ <strong>Don't:</strong>
-- Mix very different image types in ID data
-- Use corrupted or very low-resolution images
-- Have class imbalance in training data</p>
-<h3 id="performance-optimization">Performance Optimization<a class="headerlink" href="#performance-optimization" title="Permanent link">&para;</a></h3>
-<p><strong>For Speed:</strong>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>      <span class="c1"># Large batches on GPU</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:0&#39;</span><span class="p">,</span>     <span class="c1"># Use GPU</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ocsvm&#39;</span>       <span class="c1"># Fastest method</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span>
-</span></code></pre></div></p>
-<p><strong>For Accuracy:</strong>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>       <span class="c1"># Smaller batches, more stable</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">nearest_k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>        <span class="c1"># More neighbors for PRDC</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gmm&#39;</span>         <span class="c1"># Most accurate method</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">)</span>
-</span></code></pre></div></p>
-<p><strong>For Memory:</strong>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>        <span class="c1"># Small batches</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span>        <span class="c1"># Use CPU if GPU OOM</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;kde&#39;</span>         <span class="c1"># Memory-efficient</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">)</span>
-</span></code></pre></div></p>
-<h3 id="common-patterns">Common Patterns<a class="headerlink" href="#common-patterns" title="Permanent link">&para;</a></h3>
-<h4 id="cross-validation">Cross-Validation<a class="headerlink" href="#cross-validation" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">aurocs</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">val_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">all_id_paths</span><span class="p">):</span>
-</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>    <span class="n">train_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_id_paths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">train_idx</span><span class="p">]</span>
-</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="n">val_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_id_paths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">val_idx</span><span class="p">]</span>
-</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
-</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">()</span>
-</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>    <span class="n">detector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_paths</span><span class="p">,</span> <span class="n">val_split</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># No internal validation</span>
-</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">val_paths</span><span class="p">,</span> <span class="n">ood_paths</span><span class="p">)</span>
-</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>    <span class="n">aurocs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;AUROC&#39;</span><span class="p">])</span>
-</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
-</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean AUROC: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">aurocs</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">aurocs</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<h4 id="threshold-selection">Threshold Selection<a class="headerlink" href="#threshold-selection" title="Permanent link">&para;</a></h4>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Get scores for validation set</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">val_scores</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">id_val_paths</span><span class="p">)</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Set threshold for 95% TPR</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">val_scores</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Apply threshold</span>
-</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">test_scores</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">test_paths</span><span class="p">)</span>
-</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">predictions</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_scores</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Convert to -1/1</span>
-</span></code></pre></div>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="out-of-memory-errors">Out of Memory Errors<a class="headerlink" href="#out-of-memory-errors" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Reduce batch size</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
-</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Or use CPU</span>
-</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
-</span></code></pre></div>
-<h3 id="slow-performance">Slow Performance<a class="headerlink" href="#slow-performance" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Check if features are being cached</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">cache_dir</span> <span class="o">=</span> <span class="s1">&#39;./embeddings&#39;</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cached files: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># Increase batch size for GPU</span>
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="n">detector</span> <span class="o">=</span> <span class="n">ForteOODDetector</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:0&#39;</span><span class="p">)</span>
-</span></code></pre></div>
-<h3 id="poor-detection-performance">Poor Detection Performance<a class="headerlink" href="#poor-detection-performance" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Ensure sufficient training data (&gt;500 images)</li>
-<li>Check that ID and OOD are actually different distributions</li>
-<li>Try different methods (GMM usually best)</li>
-<li>Increase <code>nearest_k</code> for noisy data</li>
-</ul>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../examples/">Examples</a> - Real-world use cases</li>
-<li><a href="../methods/">Methods</a> - Technical details</li>
-<li><a href="../api-reference/">API Reference</a> - Complete API docs</li>
-</ul>
 
 
 
@@ -1542,7 +1198,7 @@
       
       
     
-    <a href="https://openreview.net/forum?id=7XNgVPxCiA" target="_blank" rel="noopener" title="openreview.net" class="md-social__link">
+    <a href="https://openreview.net/pdf?id=7XNgVPxCiA" target="_blank" rel="noopener" title="openreview.net" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M536.4-26.3c9.8-3.5 20.6-1 28 6.3s9.8 18.2 6.3 28l-178 496.9c-5 13.9-18.1 23.1-32.8 23.1-14.2 0-27-8.6-32.3-21.7l-64.2-158c-4.5-11-2.5-23.6 5.2-32.6l94.5-112.4c5.1-6.1 4.7-15-.9-20.6s-14.6-6-20.6-.9l-112.4 94.3c-9.1 7.6-21.6 9.6-32.6 5.2L38.1 216.8c-13.1-5.3-21.7-18.1-21.7-32.3 0-14.7 9.2-27.8 23.1-32.8z"/></svg>
     </a>
   
@@ -1560,10 +1216,11 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
         <script src="../javascripts/mathjax.js"></script>
       

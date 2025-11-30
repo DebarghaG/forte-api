@@ -85,7 +85,7 @@ all = [
 
 [project.urls]
 Homepage = "https://github.com/debarghag/forte-detector"
-Documentation = "https://debarghag.github.io/forte-detector"
+Documentation = "https://debarghag.github.io/forte-api"
 "Source Code" = "https://github.com/debarghag/forte-detector"
 "Bug Tracker" = "https://github.com/debarghag/forte-detector/issues"
 "Paper" = "https://openreview.net/pdf?id=7XNgVPxCiA"

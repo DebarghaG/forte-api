@@ -9,7 +9,7 @@ Out-of-distribution detection via per-point manifold estimation on self-supervis
 
 **Paper**: [PDF](https://openreview.net/pdf?id=7XNgVPxCiA) | [arXiv](https://arxiv.org/abs/2410.01322)
 
-**Documentation**: [debarghag.github.io/forte-detector](https://debarghag.github.io/forte-detector)
+**Documentation**: [debarghag.github.io/forte-api](https://debarghag.github.io/forte-api)
 
 ## Installation
 

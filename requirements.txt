@@ -5,7 +5,7 @@ cycler==0.12.1
 filelock==3.18.0
 fonttools==4.57.0
 fsspec==2025.3.2
-huggingface-hub==0.30.1
+huggingface-hub==0.36.2
 idna==3.10
 Jinja2==3.1.6
 joblib==1.4.2
@@ -29,10 +29,10 @@ setuptools==78.1.0
 six==1.17.0
 sympy==1.13.1
 threadpoolctl==3.6.0
-tokenizers==0.21.1
+tokenizers==0.22.2
 torch==2.6.0
 torchvision==0.21.0
 tqdm==4.67.1
-transformers==4.50.3
+transformers==4.57.6
 typing_extensions==4.13.1
 urllib3==2.3.0

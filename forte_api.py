@@ -96,22 +96,24 @@ class ForteOODDetector:
         """Initialize the models used for feature extraction."""
         print(f"Initializing models on {self.device}...")
         device = self.device
-        models = [
-            ("clip", CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device),
-             CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")),
-            ("vitmsn", ViTMSNModel.from_pretrained("facebook/vit-msn-base").to(device),
-             AutoFeatureExtractor.from_pretrained("facebook/vit-msn-base")),
-            ("dinov2", AutoModel.from_pretrained('facebook/dinov2-base').to(device),
-             AutoImageProcessor.from_pretrained('facebook/dinov2-base'))
-        ]
+        defaults = {
+            "clip": (CLIPModel, CLIPProcessor, "openai/clip-vit-base-patch32"),
+            "vitmsn": (ViTMSNModel, AutoFeatureExtractor, "facebook/vit-msn-base"),
+            "dinov2": (AutoModel, AutoImageProcessor, "facebook/dinov2-base"),
+        }
+        models = []
         for name in self.backbones:
-            if name in EXTRA_ENCODERS:
-                hub = EXTRA_ENCODERS[name][0]
-                # MAE masks patches by default; use the full image
-                kwargs = {"mask_ratio": 0.0} if name == "mae" else {}
-                models.append((name, AutoModel.from_pretrained(hub, **kwargs).to(device),
-                               AutoImageProcessor.from_pretrained(hub)))
-        return [m for m in models if m[0] in self.backbones]
+            if name in defaults:
+                model_cls, processor_cls, hub = defaults[name]
+            elif name in EXTRA_ENCODERS:
+                model_cls, processor_cls, hub = AutoModel, AutoImageProcessor, EXTRA_ENCODERS[name][0]
+            else:
+                raise ValueError(f"Unsupported model: {name}")
+            # MAE masks patches by default; use the full image
+            kwargs = {"mask_ratio": 0.0} if name == "mae" else {}
+            models.append((name, model_cls.from_pretrained(hub, **kwargs).to(device),
+                           processor_cls.from_pretrained(hub)))
+        return models
 
     def _extract_features_batch(self, image_paths, batch_idx=0):
         """

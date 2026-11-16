@@ -52,6 +52,7 @@ detector = ForteOODDetector(
   - 'gmm': Gaussian Mixture Model (best for clustered data)
   - 'kde': Kernel Density Estimation (best for smooth distributions)
   - 'ocsvm': One-Class SVM (best for complex boundaries)
+- **backbones** (sequence of str, default=("clip", "vitmsn", "dinov2")): Encoders to use. Also available: "dinov3", "siglip2", "dino", "mae", "ijepa"
 
 ### Methods
 

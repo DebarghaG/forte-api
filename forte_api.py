@@ -14,6 +14,16 @@ from sklearn.mixture import GaussianMixture
 from sklearn.svm import OneClassSVM
 from sklearn.metrics import pairwise_distances
 
+# Optional encoders besides the default CLIP, ViT-MSN and DINOv2:
+# name -> (Hugging Face model id, pooling of the image embedding)
+EXTRA_ENCODERS = {
+    "dinov3": ("facebook/dinov3-vitb16-pretrain-lvd1689m", "cls"),
+    "siglip2": ("google/siglip2-base-patch16-224", "image_features"),
+    "dino": ("facebook/dino-vitb16", "cls"),
+    "mae": ("facebook/vit-mae-base", "cls"),
+    "ijepa": ("facebook/ijepa_vith14_1k", "mean"),
+}
+
 #############################################
 # ForteOODDetector Class
 #############################################
@@ -35,7 +45,8 @@ class ForteOODDetector:
                  device=None,
                  embedding_dir="./embeddings",
                  nearest_k=5,
-                 method='gmm'):
+                 method='gmm',
+                 backbones=("clip", "vitmsn", "dinov2")):
         """
         Initialize the ForteOODDetector.
 
@@ -45,6 +56,8 @@ class ForteOODDetector:
             embedding_dir (str): Directory to store embeddings.
             nearest_k (int): Number of nearest neighbors for PRDC computation.
             method (str): Detector method ('gmm', 'kde', or 'ocsvm').
+            backbones (sequence of str): Encoders to use. The default is the paper's
+                                         three; names in EXTRA_ENCODERS are also accepted.
             custom_detector (bool): If True, use our custom GPU-based implementations 
                                     (TorchGMM, TorchKDE, TorchOCSVM). If False, use CPU-based detectors.
         """
@@ -60,6 +73,7 @@ class ForteOODDetector:
         self.embedding_dir = embedding_dir
         self.nearest_k = nearest_k
         self.method = method
+        self.backbones = tuple(backbones)
         self.custom_detector = (self.device != "cpu")
         self.models = None
         self.is_fitted = False
@@ -82,14 +96,23 @@ class ForteOODDetector:
         """Initialize the models used for feature extraction."""
         print(f"Initializing models on {self.device}...")
         device = self.device
-        models = [
-            ("clip", CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device),
-             CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")),
-            ("vitmsn", ViTMSNModel.from_pretrained("facebook/vit-msn-base").to(device),
-             AutoFeatureExtractor.from_pretrained("facebook/vit-msn-base")),
-            ("dinov2", AutoModel.from_pretrained('facebook/dinov2-base').to(device),
-             AutoImageProcessor.from_pretrained('facebook/dinov2-base'))
-        ]
+        defaults = {
+            "clip": (CLIPModel, CLIPProcessor, "openai/clip-vit-base-patch32"),
+            "vitmsn": (ViTMSNModel, AutoFeatureExtractor, "facebook/vit-msn-base"),
+            "dinov2": (AutoModel, AutoImageProcessor, "facebook/dinov2-base"),
+        }
+        models = []
+        for name in self.backbones:
+            if name in defaults:
+                model_cls, processor_cls, hub = defaults[name]
+            elif name in EXTRA_ENCODERS:
+                model_cls, processor_cls, hub = AutoModel, AutoImageProcessor, EXTRA_ENCODERS[name][0]
+            else:
+                raise ValueError(f"Unsupported model: {name}")
+            # MAE masks patches by default; use the full image
+            kwargs = {"mask_ratio": 0.0} if name == "mae" else {}
+            models.append((name, model_cls.from_pretrained(hub, **kwargs).to(device),
+                           processor_cls.from_pretrained(hub)))
         return models
 
     def _extract_features_batch(self, image_paths, batch_idx=0):
@@ -121,6 +144,14 @@ class ForteOODDetector:
                         features = model.get_image_features(**inputs)
                     elif model_name in ["vitmsn", "dinov2"]:
                         features = model(**inputs).last_hidden_state[:, 0, :]
+                    elif model_name in EXTRA_ENCODERS:
+                        pooling = EXTRA_ENCODERS[model_name][1]
+                        if pooling == "image_features":
+                            features = model.get_image_features(**inputs)
+                        elif pooling == "mean":
+                            features = model(**inputs).last_hidden_state.mean(dim=1)
+                        else:
+                            features = model(**inputs).last_hidden_state[:, 0, :]
                     else:
                         raise ValueError(f"Unsupported model: {model_name}")
                 all_features[model_name] = features

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- `backbones` argument of `ForteOODDetector` to choose the encoders, with DINOv3, SigLIP 2, DINO, MAE and I-JEPA as optional additions to the default CLIP, ViT-MSN and DINOv2
+
 ## 0.1.0 (2025-04-07) - Alpha Release
 
 ### Added
